@@ -17,7 +17,7 @@ class UserRepositoryTest {
     private UserRepository userRepository;
     
     @Test
-    public void 유저네임으로찾기() throws Exception{
+    public void findUser() throws Exception{
         // given
         String username = "test2";
         // when
