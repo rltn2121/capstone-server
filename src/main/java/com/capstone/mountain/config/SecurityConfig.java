@@ -35,10 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .authorizeRequests()
-                .antMatchers("/**")
+                .antMatchers("/search/**", "/mountain/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/join").permitAll()
-                .antMatchers("/auth/kakao/callback").permitAll()
+                //.antMatchers("/join").permitAll()
+                //.antMatchers("/auth/kakao/callback").permitAll()
                 .anyRequest().permitAll();
     }
 }
