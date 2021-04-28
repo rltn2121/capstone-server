@@ -1,7 +1,6 @@
 package com.capstone.mountain.auth;
 
 import com.capstone.mountain.domain.User;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

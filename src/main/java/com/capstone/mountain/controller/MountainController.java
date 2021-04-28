@@ -16,10 +16,10 @@ import java.util.Optional;
 public class MountainController {
     private final MountainService mountainService;
 
-    @GetMapping("/search")
-    public List<Mountain> findByName(@RequestParam String name){
-        return mountainService.findByName(name);
-    }
+//    @GetMapping("/search")
+//    public List<Mountain> findByName(@RequestParam String name){
+//        return mountainService.findByName(name);
+//    }
 
     @GetMapping("/mountain/{mountain_id}")
     public Optional<Mountain> findById(@PathVariable("mountain_id") Long id){
