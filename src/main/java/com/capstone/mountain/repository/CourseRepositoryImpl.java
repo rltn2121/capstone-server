@@ -41,8 +41,6 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
     }
 
     private OrderSpecifier<?> orderCond(String cond) {
-
-        System.out.println("이거진짜 ㄹㅇ 제대로 전달된거임 cond = " + cond);
         if(cond.equals("difficulty")) {
             return course.difficulty.asc();
         }
@@ -52,9 +50,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
         else if(cond.equals("distance")){
             return course.distance.asc();
         }
-        else{
-            System.out.println("아무것도 전달된게 없어요 그래서 null임 ㅅㄱ");
-            return null;
-        }
+        else
+            return course.id.asc();
     }
 }
