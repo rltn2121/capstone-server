@@ -1,6 +1,8 @@
 package com.capstone.mountain.repository;
 
+import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
+import com.capstone.mountain.dto.QCourseDetailDto;
 import com.capstone.mountain.dto.QCoursePreviewDto;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,6 +40,30 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .groupBy(course.id)
                 .orderBy(orderCond(cond))
                 .fetch();
+    }
+
+    @Override
+    public CourseDetailDto findCourseDetail(Long courseId) {
+        return queryFactory
+                .select(
+                        new QCourseDetailDto(
+                                course.id,
+                                course.name,
+                                course.location,
+                                course.distance,
+                                course.time,
+                                course.speed,
+                                course.height,
+                                course.difficulty,
+                                course.url,
+                                review.count(),
+                                review.score.avg()
+                        )
+                )
+                .from(review)
+                .rightJoin(review.course, course)
+                .where(course.id.eq(courseId))
+                .fetchOne();
     }
 
     private OrderSpecifier<?> orderCond(String cond) {

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -30,8 +30,9 @@ public class Course {
     private Double distance;
     private Double speed;
     private Double height;
+    private String location;
     private int difficulty;
-    private LocalDateTime time;
+    private LocalTime time;
 
     @Column(columnDefinition = "TEXT")
     private String url;

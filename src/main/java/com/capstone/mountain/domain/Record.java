@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -29,8 +30,9 @@ public class Record {
     private String url;
 
     private LocalDateTime date;
-    private LocalDateTime duration;
+    private LocalTime duration;
     private Double distance;
     private Double speed;
+    private Double height;
     private Double calorie;
 }

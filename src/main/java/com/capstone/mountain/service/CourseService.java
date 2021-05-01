@@ -1,6 +1,7 @@
 package com.capstone.mountain.service;
 
 import com.capstone.mountain.domain.Course;
+import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
+
+    public CourseDetailDto findCourseDetail(Long courseId){
+        return courseRepository.findCourseDetail(courseId);
+    }
 
     public List<CoursePreviewDto> searchCourses(String keyword, String order){
         return courseRepository.searchCourses(keyword, order);
