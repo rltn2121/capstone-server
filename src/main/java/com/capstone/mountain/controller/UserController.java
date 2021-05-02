@@ -145,7 +145,7 @@ public class UserController{
         return null;
     }
 
-//    @GetMapping("/kakao-login")
+//    @PostMapping("/kakao-login")
 //    public @ResponseBody String kakaoLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
 //        String access_token = req.get("access_token");
 //        RestTemplate rt2 = new RestTemplate();
@@ -212,17 +212,11 @@ public class UserController{
 //        return null;
 //    }
 
-    @GetMapping("/naver-login")
-    public @ResponseBody String naverLogin( @RequestHeader(value="Accept") String accept,
-                                            @RequestHeader(value="Content-Type") String contentType,
-                                            @RequestHeader(value="Content-Length") String contentLen,
-                                            @RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+    @PostMapping("/naver-login")
+    public @ResponseBody String naverLogin( @RequestHeader(value="x-access-token") String access_token, HttpServletResponse response) throws AuthenticationException {
 
 
-            System.out.println("Accept: " + accept);
-        System.out.println("ContentType = " + contentType);
-        System.out.println("ContentLen = " + contentLen);
-        String access_token = req.get("access_token");
+        System.out.println("access_token = " + access_token);
         RestTemplate rt2 = new RestTemplate();
 
         // HttpHeader 오브젝트 생성

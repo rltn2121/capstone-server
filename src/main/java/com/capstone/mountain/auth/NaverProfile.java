@@ -16,6 +16,7 @@ public class NaverProfile {
 		public String profile_image;
 		public String email;
 		public String name;
+		public String gender;
 	}
 }
 
