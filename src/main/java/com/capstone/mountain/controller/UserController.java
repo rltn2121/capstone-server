@@ -7,6 +7,7 @@ import com.capstone.mountain.auth.NaverProfile;
 import com.capstone.mountain.auth.OAuthToken;
 import com.capstone.mountain.auth.PrincipalDetails;
 import com.capstone.mountain.domain.User;
+import com.capstone.mountain.dto.AccessTokenDto;
 import com.capstone.mountain.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -213,7 +214,7 @@ public class UserController{
 //    }
 
     @PostMapping("/naver-login")
-    public @ResponseBody String naverLogin( @RequestHeader(value="access_token") String access_token, HttpServletResponse response) throws AuthenticationException {
+    public AccessTokenDto naverLogin( @RequestHeader(value="access_token") String access_token, HttpServletResponse response) throws AuthenticationException {
 
 
         System.out.println("access_token = " + access_token);
@@ -276,7 +277,7 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-            return "{\"access_token\":" + "\"" + jwtToken + "\"}";
+            return new AccessTokenDto(access_token);
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
