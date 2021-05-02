@@ -272,7 +272,7 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-            return jwtToken;
+            return "{\"access_token\":" + "\"" + jwtToken + "\"}";
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
