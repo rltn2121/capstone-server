@@ -213,12 +213,13 @@ public class UserController{
 //    }
 
     @PostMapping("/naver-login")
-    public @ResponseBody String naverLogin( @RequestHeader(value="x-access-token") String access_token, HttpServletResponse response) throws AuthenticationException {
+    public @ResponseBody String naverLogin( @RequestHeader(value="access_token") String access_token, HttpServletResponse response) throws AuthenticationException {
 
 
         System.out.println("access_token = " + access_token);
         RestTemplate rt2 = new RestTemplate();
 
+        //testtest
         // HttpHeader 오브젝트 생성
         HttpHeaders headers2 = new HttpHeaders();
         headers2.add("Authorization", "Bearer "+access_token);
