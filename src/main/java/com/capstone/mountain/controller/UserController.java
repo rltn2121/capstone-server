@@ -11,6 +11,7 @@ import com.capstone.mountain.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -212,7 +213,15 @@ public class UserController{
 //    }
 
     @GetMapping("/naver-login")
-    public @ResponseBody String naverLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+    public @ResponseBody String naverLogin( @RequestHeader(value="Accept") String accept,
+                                            @RequestHeader(value="Content-Type") String contentType,
+                                            @RequestHeader(value="Content-Length") String contentLen,
+                                            @RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+
+
+            System.out.println("Accept: " + accept);
+        System.out.println("ContentType = " + contentType);
+        System.out.println("ContentLen = " + contentLen);
         String access_token = req.get("access_token");
         RestTemplate rt2 = new RestTemplate();
 
