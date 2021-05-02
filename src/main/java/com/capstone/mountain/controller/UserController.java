@@ -230,7 +230,7 @@ public class UserController{
 
         // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
         ResponseEntity<String> response2 = rt2.exchange(
-            "https://www.googleapis.com/drive/v2/files",
+                "https://www.googleapis.com/drive/v2/files",
                 HttpMethod.POST,
                 naverProfileRequest2,
                 String.class
