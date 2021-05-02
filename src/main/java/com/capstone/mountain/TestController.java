@@ -55,5 +55,9 @@ public class TestController {
         return "user";
     }
 
+    @GetMapping("/hello")
+    public Hello hello(){
+        return new Hello("hello");
+    }
 
 }
