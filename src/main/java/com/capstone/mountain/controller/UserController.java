@@ -30,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Map;
@@ -214,8 +215,8 @@ public class UserController{
 //    }
 
     @PostMapping("/naver-login")
-    public AccessTokenDto naverLogin( @RequestHeader(value="access_token") String access_token, HttpServletResponse response) throws AuthenticationException {
-
+    public AccessTokenDto naverLogin(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        String access_token = request.getHeader("access_token");
 
         System.out.println("access_token = " + access_token);
         RestTemplate rt2 = new RestTemplate();
