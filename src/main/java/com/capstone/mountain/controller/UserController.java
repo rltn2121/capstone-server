@@ -90,6 +90,9 @@ public class UserController{
                 String.class                                // 응답의 타입
         );
 
+        System.out.println("******************************************");
+        System.out.println("액세스 토큰 정보 응답 확인");
+        System.out.println("response = " + response);
         ObjectMapper objectMapper = new ObjectMapper();
         OAuthToken oauthToken = null;
         try {
@@ -144,40 +147,108 @@ public class UserController{
         return null;
     }
 
-//    @GetMapping("/kakao-login")
-//    public @ResponseBody String kakaoLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
-//        String access_token = req.get("access_token");
-//        RestTemplate rt2 = new RestTemplate();
-//
-//        // HttpHeader 오브젝트 생성
-//        HttpHeaders headers2 = new HttpHeaders();
-//        headers2.add("Authorization", "Bearer "+access_token);
-//        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//
-//        // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-//        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
-//                new HttpEntity<>(headers2);
-//
-//        // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
-//        ResponseEntity<String> response2 = rt2.exchange(
-//                "https://kapi.kakao.com/v2/user/me",
-//                HttpMethod.POST,
-//                kakaoProfileRequest2,
-//                String.class
-//        );
-//        System.out.println(response2.getBody());
-//
+    @PostMapping("/kakao-login")
+    public @ResponseBody String kakaoLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+        String access_token = req.get("access_token");
+        RestTemplate rt2 = new RestTemplate();
+
+        // HttpHeader 오브젝트 생성
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.add("Authorization", "Bearer "+access_token);
+        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
+                new HttpEntity<>(headers2);
+
+        // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
+        ResponseEntity<String> response2 = rt2.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoProfileRequest2,
+                String.class
+        );
+        System.out.println(response2.getBody());
+
+        ObjectMapper objectMapper2 = new ObjectMapper();
+        KakaoProfile kakaoProfile = null;
+        try {
+            kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        String username = kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId();
+        String password = "qwerty123";
+
+        // 가입자 혹은 비가입자 체크 해서 처리
+        User originUser = userService.chkUserExist(username);
+        if(originUser.getUsername() == null) {
+            System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
+            originUser.setUsername(username);
+            originUser.setPassword(password);
+            userService.join(originUser);
+        }
+
+        System.out.println("자동 로그인을 진행합니다.");
+        try{
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            // 3. PrincipalDetails를 세션에 담음 (권한 관리를 위해서)
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+            String jwtToken = JWT.create()
+                    .withSubject(principalDetails.getUsername())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 120)))
+                    .withClaim("id", principalDetails.getUser().getId())
+                    .withClaim("username", principalDetails.getUser().getUsername())
+                    .sign(Algorithm.HMAC512("cos"));
+            response.addHeader("Authorization", "Bearer " + jwtToken);
+            return "{ \"access-token\":" + "\"" + jwtToken + "\"}";
+        } catch(AuthenticationException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/google-login")
+    public @ResponseBody String googleLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+        String access_token = req.get("access_token");
+        RestTemplate rt2 = new RestTemplate();
+
+        // HttpHeader 오브젝트 생성
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.add("Authorization", "Bearer "+access_token);
+        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        HttpEntity<MultiValueMap<String, String>> naverProfileRequest2 =
+                new HttpEntity<>(headers2);
+
+        // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
+        ResponseEntity<String> response2 = rt2.exchange(
+            "https://www.googleapis.com/drive/v2/files",
+                HttpMethod.POST,
+                naverProfileRequest2,
+                String.class
+        );
+        System.out.println(response2.getBody());
+
 //        ObjectMapper objectMapper2 = new ObjectMapper();
-//        KakaoProfile kakaoProfile = null;
+//        NaverProfile kakaoProfile = null;
 //        try {
-//            kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
+//            kakaoProfile = objectMapper2.readValue(response2.getBody(), NaverProfile.class);
 //        } catch (JsonMappingException e) {
 //            e.printStackTrace();
 //        } catch (JsonProcessingException e) {
 //            e.printStackTrace();
 //        }
 //
-//        String username = kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId();
+//
+//        String username = kakaoProfile.getResponse().getEmail()+"_"+kakaoProfile.getResponse().getId();
 //        String password = "qwerty123";
 //
 //        // 가입자 혹은 비가입자 체크 해서 처리
@@ -208,12 +279,14 @@ public class UserController{
 //        } catch(AuthenticationException e){
 //            e.printStackTrace();
 //        }
-//        return null;
-//    }
+        return null;
+    }
 
-    @GetMapping("/naver-login")
+    @PostMapping("/naver-login")
     public @ResponseBody String naverLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+        System.out.println("req.get 이전");
         String access_token = req.get("access_token");
+        System.out.println("req.get 이후");
         RestTemplate rt2 = new RestTemplate();
 
         // HttpHeader 오브젝트 생성
@@ -227,7 +300,7 @@ public class UserController{
 
         // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
         ResponseEntity<String> response2 = rt2.exchange(
-            "https://openapi.naver.com/v1/nid/me",
+                "https://openapi.naver.com/v1/nid/me",
                 HttpMethod.POST,
                 naverProfileRequest2,
                 String.class
@@ -272,10 +345,11 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-            return jwtToken;
+            return "{\"access_token\":" + "\"" + jwtToken + "\"}";
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
+        // test
         return null;
     }
 }
