@@ -257,108 +257,33 @@ public class UserController{
 
         String username = kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId();
         String password = "qwerty123";
+        return getJwt(response, username, password);
 
-        // 가입자 혹은 비가입자 체크 해서 처리
-        User originUser = userService.chkUserExist(username);
-        if(originUser.getUsername() == null) {
-            System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
-            originUser.setUsername(username);
-            originUser.setPassword(password);
-            userService.join(originUser);
-        }
-
-        System.out.println("자동 로그인을 진행합니다.");
-        Message message = new Message();
-        try{
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-            // 3. PrincipalDetails를 세션에 담음 (권한 관리를 위해서)
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-
-            String jwtToken = JWT.create()
-                    .withSubject(principalDetails.getUsername())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 120)))
-                    .withClaim("id", principalDetails.getUser().getId())
-                    .withClaim("username", principalDetails.getUser().getUsername())
-                    .sign(Algorithm.HMAC512("cos"));
-            response.addHeader("Authorization", "Bearer " + jwtToken);
-            message.setStatus(OK);
-            message.setMessage("조회 성공");
-            message.setData(new AccessTokenDto(jwtToken));
-            return new ResponseEntity<>(message, OK);
-        } catch(AuthenticationException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    @PostMapping("/google-login")
-    public @ResponseBody String googleLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
-        String access_token = req.get("access_token");
-        RestTemplate rt2 = new RestTemplate();
+    @PostMapping("/join")
+    public ResponseEntity<Message> join(@RequestBody User user, HttpServletResponse response) {
+        Message message = new Message();
+        String username = user.getUsername();
+        String password = user.getPassword();
+        System.out.println("인코딩 전 패스워드: " + password );
+        // 있으면 리턴, 없으면 new User()
+        User searchUser = userService.chkUserExist(username);
+        if(searchUser.getUsername() != null){
+            message.setStatus(BAD_REQUEST);
+            message.setMessage("이미 존재하는 username 입니다.");
+            return new ResponseEntity<>(message, message.getStatus());
+        }
+        else{
+            System.out.println("사용할 수 있는 username입니다.");
+            searchUser = userService.join(user);
+            message.setStatus(CREATED);
+            message.setMessage("회원가입 성공");
+            System.out.println("회원가입 성공");
+        }
 
-        // HttpHeader 오브젝트 생성
-        HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer "+access_token);
-        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> naverProfileRequest2 =
-                new HttpEntity<>(headers2);
-
-        // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
-        ResponseEntity<String> response2 = rt2.exchange(
-                "https://www.googleapis.com/drive/v2/files",
-                HttpMethod.POST,
-                naverProfileRequest2,
-                String.class
-        );
-        System.out.println(response2.getBody());
-
-//        ObjectMapper objectMapper2 = new ObjectMapper();
-//        NaverProfile kakaoProfile = null;
-//        try {
-//            kakaoProfile = objectMapper2.readValue(response2.getBody(), NaverProfile.class);
-//        } catch (JsonMappingException e) {
-//            e.printStackTrace();
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        String username = kakaoProfile.getResponse().getEmail()+"_"+kakaoProfile.getResponse().getId();
-//        String password = "qwerty123";
-//
-//        // 가입자 혹은 비가입자 체크 해서 처리
-//        User originUser = userService.chkUserExist(username);
-//        if(originUser.getUsername() == null) {
-//            System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
-//            originUser.setUsername(username);
-//            originUser.setPassword(password);
-//            userService.join(originUser);
-//        }
-//
-//        System.out.println("자동 로그인을 진행합니다.");
-//        try{
-//            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
-//            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-//
-//            // 3. PrincipalDetails를 세션에 담음 (권한 관리를 위해서)
-//            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//
-//            String jwtToken = JWT.create()
-//                    .withSubject(principalDetails.getUsername())
-//                    .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 120)))
-//                    .withClaim("id", principalDetails.getUser().getId())
-//                    .withClaim("username", principalDetails.getUser().getUsername())
-//                    .sign(Algorithm.HMAC512("cos"));
-//            response.addHeader("Authorization", "Bearer " + jwtToken);
-//            return jwtToken;
-//        } catch(AuthenticationException e){
-//            e.printStackTrace();
-//        }
-        return null;
+        System.out.println("인코딩 후 패스워드: " + searchUser.getPassword());
+        return autoLogin(response, password, searchUser);
     }
 
     @PostMapping("/naver-login")
@@ -395,23 +320,30 @@ public class UserController{
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-
         String username = kakaoProfile.getResponse().getEmail()+"_"+kakaoProfile.getResponse().getId();
         String password = "qwerty123";
 
         // 가입자 혹은 비가입자 체크 해서 처리
+        return getJwt(response, username, password);
+    }
+
+    private ResponseEntity<Message> getJwt(HttpServletResponse response, String username, String password) {
+        // 가입자 혹은 비가입자 체크 해서 처리
         User originUser = userService.chkUserExist(username);
-        if(originUser.getUsername() == null) {
+        if (originUser.getUsername() == null) {
             System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
             originUser.setUsername(username);
             originUser.setPassword(password);
             userService.join(originUser);
         }
 
+        return autoLogin(response, password, originUser);
+    }
+
+    private ResponseEntity<Message> autoLogin(HttpServletResponse response, String password, User originUser) {
         System.out.println("자동 로그인을 진행합니다.");
         Message message = new Message();
-        try{
+        try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -425,17 +357,13 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-
-
-
             message.setStatus(OK);
             message.setMessage("조회 성공");
             message.setData(new AccessTokenDto(jwtToken));
             return new ResponseEntity<>(message, OK);
-        } catch(AuthenticationException e){
+        } catch (AuthenticationException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

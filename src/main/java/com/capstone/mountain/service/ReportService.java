@@ -10,4 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReportService {
     private final ReportRepository reportRepository;
+    
+    
 }

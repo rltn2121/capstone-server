@@ -41,11 +41,7 @@ public class TestController {
         return "<h1>token</h1>";
     }
 
-    @PostMapping("/join")
-    public String join(@RequestBody User user) {
-        userService.join(user);
-        return "회원가입완료";
-    }
+
 
     @GetMapping("/api/v1/user")
     public String user() {
