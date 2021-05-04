@@ -108,6 +108,9 @@ public class UserController{
 
     @GetMapping("/auth/kakao/callback")
     public ResponseEntity<Message> kakaoCallback(String code){
+        
+        System.out.println("나 코드 받았다~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("************ code: " + code + "*******************");
         // POST 방식으로 key=value 데이터를 요청 (카카오에게)
         RestTemplate rt = new RestTemplate();
 
