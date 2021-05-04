@@ -119,7 +119,7 @@ public class UserController{
         // rest api 키, redirect_uri 등은 직접 입력하지 않고, 변수로 저장해서 쓰는것이 더 좋음음
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "6f60644a53564adaaf4bd710d69a12a2");
+        params.add("client_id", "d3dec0f0ec318c6d7d147499579ed3cb");
         params.add("redirect_uri", "http://ec2-15-165-252-29.ap-northeast-2.compute.amazonaws.com/auth/kakao/callback");
         params.add("code", code);
 
