@@ -52,11 +52,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         record.calorie.avg()
                 )
                 .from(record)
-                .leftJoin(record.user, user)
+                .rightJoin(record.user, user)
                 .where(user.id.eq(userId))
                 .groupBy(user)
                 .fetchOne();
-        // then
+
         return new UserProfileDto(tuple, getDuration(timeList, "sum"), getDuration(timeList, "avg"));
     }
 
@@ -64,24 +64,28 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         int hour = 0;
         int minute = 0;
         int second = 0;
+        if(timeList.size() > 0){
 
-        for (LocalTime t : timeList) {
-            second += t.getHour()*3600;
-            second += t.getMinute()*60;
-            second += t.getSecond();
-        }
-        if(cmd == "avg"){
-            second /= timeList.size();
-        }
+            for (LocalTime t : timeList) {
+                second += t.getHour()*3600;
+                second += t.getMinute()*60;
+                second += t.getSecond();
+            }
+            if(cmd == "avg"){
+                second /= timeList.size();
+            }
 
-        hour = second / 3600;
-        second %= 3600;
-        minute = second / 60;
-        second %= 60;
+            hour = second / 3600;
+            second %= 3600;
+            minute = second / 60;
+            second %= 60;
+
+        }
         return hour + "시간 " + minute + "분 " + second + "초";
     }
 
     private List<LocalTime> getLocalTimes(Long userId) {
+        System.out.println("getLocalTimes 실행됨");
         return queryFactory
                 .select(record.duration)
                 .from(record)

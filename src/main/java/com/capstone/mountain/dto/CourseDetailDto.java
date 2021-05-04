@@ -35,6 +35,6 @@ public class CourseDetailDto {
         this.difficulty = difficulty;
         this.url = url;
         this.review_cnt = review_cnt;
-        this.score = score;
+        this.score = (score == null ? 0 : score);
     }
 }

@@ -1,12 +1,16 @@
 package com.capstone.mountain.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.capstone.mountain.domain.User;
+import com.capstone.mountain.dto.UserProfileDto;
 import com.capstone.mountain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,13 +24,21 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public String updateProfile(Long userId, String nickname, int height, int weight){
+    public List<User> findByNickname(String nickname){
+        return userRepository.findByNickname(nickname);
+    }
+
+    public Boolean updateProfile(Long userId, String nickname, int height, int weight){
         Long updated = userRepository.updateProfile(userId, nickname, height, weight);
 
         if(updated == 0)
-            return "프로필 수정 중 오류가 발생했습니다.";
+            return false;
         else
-            return "프로필 수정이 완료되었습니다.";
+            return true;
+    }
+
+    public UserProfileDto getUserProfile(Long userId){
+        return userRepository.getUserProfile(userId);
     }
 
     public User join(User user){
@@ -44,4 +56,22 @@ public class UserService {
         return user;
     }
 
+
+    public boolean checkValidUser(String jwtToken, Long user_id){
+        String username =
+                JWT.require(Algorithm.HMAC512("cos"))
+                        .build()
+                        .verify(jwtToken)
+                        .getClaim("username")
+                        .asString();
+        User byUsername = userRepository.findByUsername(username);
+        System.out.println("byUsername = " + byUsername.getId());
+        System.out.println("user_id = " + user_id);
+        if(byUsername.getId() == user_id){
+            return true;
+        }
+        else
+            return false;
+
+    }
 }

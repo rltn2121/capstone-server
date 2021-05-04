@@ -2,21 +2,21 @@ package com.capstone.mountain.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.capstone.mountain.Message;
 import com.capstone.mountain.auth.KakaoProfile;
 import com.capstone.mountain.auth.NaverProfile;
 import com.capstone.mountain.auth.OAuthToken;
 import com.capstone.mountain.auth.PrincipalDetails;
 import com.capstone.mountain.domain.User;
+import com.capstone.mountain.dto.AccessTokenDto;
+import com.capstone.mountain.dto.UserProfileDto;
 import com.capstone.mountain.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,11 +28,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
+import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
@@ -49,8 +49,40 @@ public class UserController{
      * @return 성공 여부 메시지
      */
     @PatchMapping("/user/{user_id}")
-    public String updateProfile(@PathVariable Long user_id, @RequestBody String nickname, @RequestBody int height, @RequestBody int weight){
-        return userService.updateProfile(user_id, nickname, height, weight);
+    public ResponseEntity<Message> updateProfile(HttpServletRequest request,
+                                                @PathVariable Long user_id,
+                                                 @RequestBody Map<String, String> req){
+        Message message = new Message();
+
+        String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+        String nickname = req.get("nickname");
+        int height = Integer.parseInt(req.get("height"));
+        int weight = Integer.parseInt(req.get("weight"));
+        
+        boolean isValid = userService.checkValidUser(jwtToken, user_id);
+        if(!isValid){
+            message.setStatus(BAD_REQUEST);
+            message.setMessage("다른 사용자의 프로필을 변경할 수 없습니다.");
+            return new ResponseEntity<>(message, message.getStatus());
+        }
+        
+        List<User> byNickname = userService.findByNickname(nickname);
+        if(byNickname.size()>0){
+            message.setStatus(BAD_REQUEST);
+            message.setMessage("이미 존재하는 닉네임입니다.");
+            return new ResponseEntity<>(message, message.getStatus());
+        }
+
+        Boolean result = userService.updateProfile(user_id, nickname, height, weight);
+        if(result){
+            message.setStatus(CREATED);
+            message.setMessage("프로필을 성공적으로 변경했습니다.");
+        }
+        else{
+            message.setStatus(BAD_REQUEST);
+            message.setMessage("프로필 변경 중 오류가 발생했습니다.");
+        }
+        return new ResponseEntity<>(message, message.getStatus());
     }
 
     /**
@@ -58,8 +90,20 @@ public class UserController{
      * @return 사용자 프로필
      */
     @GetMapping("/user/{user_id}")
-    public Optional<User> findById(@PathVariable("user_id") Long id){
-        return userService.findById(id);
+    public ResponseEntity<Message> getUsserProfile(@PathVariable("user_id") Long id){
+        Message message = new Message();
+
+        UserProfileDto userProfile = userService.getUserProfile(id);
+        if(userProfile == null){
+            message.setMessage("존재하지 않는 사용자입니다.");
+            message.setStatus(BAD_REQUEST);
+        }
+        else{
+            message.setMessage("조회 성공");
+            message.setStatus(OK);
+            message.setData(userProfile);
+        }
+        return new ResponseEntity<>(message, message.getStatus());
     }
 
     @GetMapping("/auth/kakao/callback")
@@ -148,7 +192,7 @@ public class UserController{
     }
 
     @PostMapping("/kakao-login")
-    public @ResponseBody String kakaoLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+    public ResponseEntity<Message> kakaoLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
         String access_token = req.get("access_token");
         RestTemplate rt2 = new RestTemplate();
 
@@ -193,6 +237,7 @@ public class UserController{
         }
 
         System.out.println("자동 로그인을 진행합니다.");
+        Message message = new Message();
         try{
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -207,7 +252,10 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-            return "{ \"access-token\":" + "\"" + jwtToken + "\"}";
+            message.setStatus(OK);
+            message.setMessage("조회 성공");
+            message.setData(new AccessTokenDto(jwtToken));
+            return new ResponseEntity<>(message, OK);
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
@@ -283,7 +331,7 @@ public class UserController{
     }
 
     @PostMapping("/naver-login")
-    public @ResponseBody String naverLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
+    public ResponseEntity<Message> naverLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
         System.out.println("req.get 이전");
         String access_token = req.get("access_token");
         System.out.println("req.get 이후");
@@ -331,6 +379,7 @@ public class UserController{
         }
 
         System.out.println("자동 로그인을 진행합니다.");
+        Message message = new Message();
         try{
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -345,11 +394,17 @@ public class UserController{
                     .withClaim("username", principalDetails.getUser().getUsername())
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
-            return "{\"access_token\":" + "\"" + jwtToken + "\"}";
+
+
+
+            message.setStatus(OK);
+            message.setMessage("조회 성공");
+            message.setData(new AccessTokenDto(jwtToken));
+            return new ResponseEntity<>(message, OK);
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
-        // test
+
         return null;
     }
 }

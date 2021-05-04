@@ -12,10 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,8 +53,13 @@ public class TestController {
     }
 
     @GetMapping("/hello")
-    public Hello hello(){
-        return new Hello("hello");
+    public ResponseEntity<Message> hello(){
+        //return new Hello("hello");
+        Message message = new Message();
+        message.setStatus(HttpStatus.OK);
+        message.setMessage("전송 성공");
+        message.setData(new Hello("hello"));
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }

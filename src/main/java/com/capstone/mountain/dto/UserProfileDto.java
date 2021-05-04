@@ -5,8 +5,12 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.lang.Math;
 
 import java.sql.Time;
+
+import static java.lang.Math.round;
+
 
 @Data
 @NoArgsConstructor
@@ -16,6 +20,7 @@ public class UserProfileDto {
     private String nickname;    // 닉네임
     private int weight;         // 키
     private int height;         // 몸무게
+
     private Double dist_total;  // 총 등산거리
     private Double dist_avg;    // 평균 등산거리
     private String duration_total;// 총 등산 시간
@@ -29,7 +34,6 @@ public class UserProfileDto {
     private Double calorie_avg; // 평균 소모 칼로리
 
     @QueryProjection
-
     public UserProfileDto(Tuple tuple, String duration_total, String duration_avg) {
         this.id = tuple.get(0, Long.class);
         this.nickname = tuple.get(1, String.class);
@@ -46,5 +50,24 @@ public class UserProfileDto {
         this.calorie_avg = tuple.get(12, Double.class);
         this.duration_total = duration_total;
         this.duration_avg = duration_avg;
+
+        if(dist_avg == null){
+            this.dist_avg = 0.0;
+            this.dist_total = 0.0;
+            this.height_total = 0.0;
+            this.height_max = 0.0;
+            this.height_avg = 0.0;
+            this.speed_avg =0.0;
+            this.speed_max = 0.0;
+            this.calorie_total = 0.0;
+            this.calorie_avg = 0.0;
+        }
+        else{
+            this.dist_avg = round(dist_avg*100)/100.0;
+            this.height_max = round(height_max*10)/10.0;
+            this.height_avg = round(height_avg*10)/10.0;
+            this.speed_avg = round(speed_avg*100)/100.0;
+            this.calorie_avg = round(calorie_avg*10)/10.0;
+        }
     }
 }
