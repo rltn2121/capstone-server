@@ -65,13 +65,12 @@ public class UserController{
             message.setMessage("다른 사용자의 프로필을 변경할 수 없습니다.");
             return new ResponseEntity<>(message, message.getStatus());
         }
-        
-        List<User> byNickname = userService.findByNickname(nickname);
-        if(byNickname.size()>0){
-            message.setStatus(BAD_REQUEST);
-            message.setMessage("이미 존재하는 닉네임입니다.");
-            return new ResponseEntity<>(message, message.getStatus());
-        }
+//
+//        if(userService.isNicknameDuplicate(nickname)) {
+//            message.setStatus(BAD_REQUEST);
+//            message.setMessage("이미 존재하는 닉네임입니다.");
+//            return new ResponseEntity<>(message, message.getStatus());
+//        }
 
         Boolean result = userService.updateProfile(user_id, nickname, height, weight);
         if(result){
@@ -262,11 +261,14 @@ public class UserController{
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Message> join(@RequestBody User user, HttpServletResponse response) {
+    // username, nickname, password는 임의로 생성
+    public ResponseEntity<Message> join(@RequestBody Map<String, String> req, HttpServletResponse response) {
         Message message = new Message();
-        String username = user.getUsername();
-        String password = user.getPassword();
-        System.out.println("인코딩 전 패스워드: " + password );
+        String username = req.get("username");
+        String nickname = req.get("nickname");
+        String password = "qwerty123";
+
+
         // 있으면 리턴, 없으면 new User()
         User searchUser = userService.chkUserExist(username);
         if(searchUser.getUsername() != null){
@@ -274,9 +276,18 @@ public class UserController{
             message.setMessage("이미 존재하는 username 입니다.");
             return new ResponseEntity<>(message, message.getStatus());
         }
+//        else if(userService.isNicknameDuplicate(nickname)) {
+//            message.setStatus(BAD_REQUEST);
+//            message.setMessage("이미 존재하는 닉네임입니다.");
+//            return new ResponseEntity<>(message, message.getStatus());
+//        }
         else{
             System.out.println("사용할 수 있는 username입니다.");
-            searchUser = userService.join(user);
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setPassword(password);
+            newUser.setNickname(nickname);
+            searchUser = userService.join(newUser);
             message.setStatus(CREATED);
             message.setMessage("회원가입 성공");
             System.out.println("회원가입 성공");

@@ -6,12 +6,15 @@ import com.capstone.mountain.domain.User;
 import com.capstone.mountain.dto.UserProfileDto;
 import com.capstone.mountain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @Transactional
@@ -73,5 +76,13 @@ public class UserService {
         else
             return false;
 
+    }
+
+    public boolean isNicknameDuplicate(String nickname){
+        List<User> byNickname = findByNickname(nickname);
+        if(byNickname.size()>0){
+            return true;
+        }
+        return false;
     }
 }
