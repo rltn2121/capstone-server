@@ -107,7 +107,7 @@ public class UserController{
     }
 
     @GetMapping("/auth/kakao/callback")
-    public @ResponseBody Authentication kakaoCallback(String code){
+    public ResponseEntity<Message> kakaoCallback(String code){
         // POST 방식으로 key=value 데이터를 요청 (카카오에게)
         RestTemplate rt = new RestTemplate();
 
@@ -119,8 +119,8 @@ public class UserController{
         // rest api 키, redirect_uri 등은 직접 입력하지 않고, 변수로 저장해서 쓰는것이 더 좋음음
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "7698fd9c957f6e2ebe9d5d8e97cea593");
-        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
+        params.add("client_id", "6f60644a53564adaaf4bd710d69a12a2");
+        params.add("redirect_uri", "http://ec2-15-165-252-29.ap-northeast-2.compute.amazonaws.com/auth/kakao/callback");
         params.add("code", code);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -147,11 +147,13 @@ public class UserController{
             e.printStackTrace();
         }
         System.out.println("카카오 액세스 토큰: " + oauthToken.getAccess_token());
+        String access_token = oauthToken.getAccess_token();
+
         RestTemplate rt2 = new RestTemplate();
 
         // HttpHeader 오브젝트 생성
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer "+oauthToken.getAccess_token());
+        headers2.add("Authorization", "Bearer "+access_token);
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -167,8 +169,6 @@ public class UserController{
         );
         System.out.println(response2.getBody());
 
-        System.out.println("***********************************");
-
         ObjectMapper objectMapper2 = new ObjectMapper();
         KakaoProfile kakaoProfile = null;
         try {
@@ -179,15 +179,43 @@ public class UserController{
             e.printStackTrace();
         }
 
-        // User 오브젝트 : username, password, email
-        System.out.println("카카오 아이디(번호) : "+kakaoProfile.getId());
-        System.out.println("카카오 이메일 : "+kakaoProfile.getKakao_account().getEmail());
+        String username = kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId();
+        String password = "qwerty123";
 
-        System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
-        System.out.println("블로그서버 이메일 : "+kakaoProfile.getKakao_account().getEmail());
-        // UUID란 -> 중복되지 않는 어떤 특정 값을 만들어내는 알고리즘
-        UUID garbagePassword = UUID.randomUUID();
-        System.out.println("블로그서버 패스워드 : "+ garbagePassword);
+        // 가입자 혹은 비가입자 체크 해서 처리
+        User originUser = userService.chkUserExist(username);
+        if(originUser.getUsername() == null) {
+            System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
+            originUser.setUsername(username);
+            originUser.setPassword(password);
+            userService.join(originUser);
+        }
+
+        System.out.println("자동 로그인을 진행합니다.");
+        Message message = new Message();
+        try{
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(originUser.getUsername(), password);
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            // 3. PrincipalDetails를 세션에 담음 (권한 관리를 위해서)
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+            String jwtToken = JWT.create()
+                    .withSubject(principalDetails.getUsername())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 120)))
+                    .withClaim("id", principalDetails.getUser().getId())
+                    .withClaim("username", principalDetails.getUser().getUsername())
+                    .sign(Algorithm.HMAC512("cos"));
+
+
+            //response2.addHeader("Authorization", "Bearer " + jwtToken);
+            message.setStatus(OK);
+            message.setMessage("조회 성공");
+            message.setData(new AccessTokenDto(jwtToken));
+            return new ResponseEntity<>(message, OK);
+        } catch(AuthenticationException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
