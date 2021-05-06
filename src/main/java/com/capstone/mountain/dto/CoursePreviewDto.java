@@ -26,7 +26,7 @@ public class CoursePreviewDto {
     @QueryProjection
     public CoursePreviewDto(Long id, String name, Double distance, Double height, LocalTime time, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
-        this.name = name;
+        this.name = (name.length() > 20 ? name.substring(0, 17) + "..." : name);
         this.distance = distance;
         this.height = height;
         this.time = time;

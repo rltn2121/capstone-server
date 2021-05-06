@@ -20,6 +20,15 @@ import java.net.BindException;
 import java.util.HashMap;
 import java.util.Map;
 
+//
+//        HttpStatus.NOT_FOUND
+//        HttpStatus.BAD_REQUEST
+//        HttpStatus.OK
+//        HttpStatus.CREATED
+//        HttpStatus.UNAUTHORIZED
+//        HttpStatus.FORBIDDEN
+//        HttpStatus.INTERNAL_SERVER_ERROR
+//        HttpStatus.METHOD_NOT_ALLOWED
 
 @Slf4j
 @RestControllerAdvice
@@ -76,6 +85,7 @@ public class GlobalRestControllerAdvice {
         return errorAttributes;
     }
 
+
     /**
      * uri 잘못됨      (404)
      */
@@ -101,4 +111,5 @@ public class GlobalRestControllerAdvice {
         errorAttributes.put("data", "");
         return errorAttributes;
     }
+
 }

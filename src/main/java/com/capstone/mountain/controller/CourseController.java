@@ -34,6 +34,7 @@ public class CourseController {
 //        return new ResponseEntity<>(message, OK);
 //    }
 
+    
     @GetMapping("/course/{course_id}")
     public ResponseEntity<Message> findCourseDetail(@PathVariable("course_id") Long id){
         CourseDetailDto courseDetail = courseService.findCourseDetail(id);
