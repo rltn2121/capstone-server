@@ -37,7 +37,10 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 )
                 .from(review)
                 .rightJoin(review.course, course)
-                .where(course.name.contains(keyword))
+                .where(
+                        course.name.contains(keyword)
+                .or(course.mountain.name.contains(keyword))
+                .or(course.location.contains(keyword)))
                 .groupBy(course.id)
                 .orderBy(orderCond(cond))
                 .fetch();
