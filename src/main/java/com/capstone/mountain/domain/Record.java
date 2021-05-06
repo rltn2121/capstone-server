@@ -32,9 +32,12 @@ public class Record {
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
     private LocalDateTime date;
+    @Column(name="moving_time")
+    private LocalTime movingTime;
     private LocalTime duration;
     private Double distance;
     private Double speed;
     private int height;
+    private String name;
     private Double calorie;
 }

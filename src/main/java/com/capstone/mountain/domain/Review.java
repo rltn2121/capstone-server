@@ -25,4 +25,10 @@ public class Review {
     private Course course;
 
     private int score;
+
+    public Review(User user, Course course, int score) {
+        this.user = user;
+        this.course = course;
+        this.score = score;
+    }
 }

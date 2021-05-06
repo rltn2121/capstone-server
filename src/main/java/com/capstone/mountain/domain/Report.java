@@ -11,6 +11,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Report {
+    public Report(User user, Course course, String reason) {
+        this.user = user;
+        this.course = course;
+        this.reason = reason;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "report_id")

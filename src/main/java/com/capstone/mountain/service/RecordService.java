@@ -2,6 +2,8 @@ package com.capstone.mountain.service;
 
 import com.capstone.mountain.domain.Record;
 import com.capstone.mountain.domain.User;
+import com.capstone.mountain.dto.RecordDetailDto;
+import com.capstone.mountain.dto.RecordPreviewDto;
 import com.capstone.mountain.repository.RecordRepository;
 import com.capstone.mountain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +19,11 @@ import java.util.Optional;
 public class RecordService {
     private final RecordRepository recordRepository;
 
+    public List<RecordPreviewDto> findRecords(Long userId){
+        return recordRepository.findRecordPreview(userId);
+    }
+
+    public RecordDetailDto findRecordDetail(Long recordId) {
+        return recordRepository.findRecordDetail(recordId);
+    }
 }
