@@ -31,7 +31,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.difficulty,
                                 course.url,
                                 review.count(),
-                                review.score.avg()
+                                review.score.avg(),
+                                course.thumbnail
                         )
                 )
                 .from(review)
@@ -57,7 +58,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.difficulty,
                                 course.url,
                                 review.count(),
-                                review.score.avg()
+                                review.score.avg(),
+                                course.thumbnail
                         )
                 )
                 .from(review)

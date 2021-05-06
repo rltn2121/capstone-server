@@ -64,6 +64,7 @@ public class UserProfileDto {
         }
         else{
             this.dist_avg = round(dist_avg*100)/100.0;
+            this.dist_total = round(dist_total*100)/100.0;
             this.height_max = round(height_max*10)/10.0;
             this.height_avg = round(height_avg*10)/10.0;
             this.speed_avg = round(speed_avg*100)/100.0;

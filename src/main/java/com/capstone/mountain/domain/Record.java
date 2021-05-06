@@ -29,6 +29,8 @@ public class Record {
     @Column(columnDefinition = "TEXT")
     private String url;
 
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
     private LocalDateTime date;
     private LocalTime duration;
     private Double distance;

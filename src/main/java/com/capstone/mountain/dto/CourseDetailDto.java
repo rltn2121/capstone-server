@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.time.LocalTime;
 
 @Data
@@ -22,9 +23,10 @@ public class CourseDetailDto {
     private String url;
     private Long review_cnt;
     private Double score;
+    private String thumbnail;
 
     @QueryProjection
-    public CourseDetailDto(Long id, String name, String location, Double distance, LocalTime time, Double speed, Double height, int difficulty, String url, Long review_cnt, Double score) {
+    public CourseDetailDto(Long id, String name, String location, Double distance, LocalTime time, Double speed, Double height, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -36,5 +38,6 @@ public class CourseDetailDto {
         this.url = url;
         this.review_cnt = review_cnt;
         this.score = (score == null ? 0 : score);
+        this.thumbnail = thumbnail;
     }
 }

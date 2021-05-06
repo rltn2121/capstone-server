@@ -36,4 +36,6 @@ public class Course {
 
     @Column(columnDefinition = "TEXT")
     private String url;
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
 }

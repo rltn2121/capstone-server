@@ -21,9 +21,10 @@ public class CoursePreviewDto {
     private String url;
     private Long review_cnt;
     private Double score;
+    private String thumbnail;
 
     @QueryProjection
-    public CoursePreviewDto(Long id, String name, Double distance, Double height, LocalTime time, int difficulty, String url, Long review_cnt, Double score) {
+    public CoursePreviewDto(Long id, String name, Double distance, Double height, LocalTime time, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
         this.name = name;
         this.distance = distance;
@@ -32,6 +33,7 @@ public class CoursePreviewDto {
         this.difficulty = difficulty;
         this.url = url;
         this.review_cnt = review_cnt;
-        this.score = score;
+        this.score = (score == null ? 0 : score);
+        this.thumbnail = thumbnail;
     }
 }
