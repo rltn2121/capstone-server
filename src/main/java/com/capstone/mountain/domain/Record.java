@@ -35,6 +35,6 @@ public class Record {
     private LocalTime duration;
     private Double distance;
     private Double speed;
-    private Double height;
+    private int height;
     private Double calorie;
 }

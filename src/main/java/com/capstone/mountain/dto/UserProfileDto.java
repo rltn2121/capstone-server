@@ -25,9 +25,9 @@ public class UserProfileDto {
     private Double dist_avg;    // 평균 등산거리
     private String duration_total;// 총 등산 시간
     private String duration_avg;  // 평균 등산 시간
-    private Double height_total;// 총 오른 높이
-    private Double height_max;  // 최고 높이
-    private Double height_avg;  // 평균 높이
+    private int height_total;// 총 오른 높이
+    private int height_max;  // 최고 높이
+    private int height_avg;  // 평균 높이
     private Double speed_avg;   // 평균 속도
     private Double speed_max;   // 최고 속도
     private Double calorie_total;  // 총 소모 칼로리
@@ -41,9 +41,9 @@ public class UserProfileDto {
         this.height = tuple.get(3, Integer.class);
         this.dist_total = tuple.get(4, Double.class);
         this.dist_avg = tuple.get(5, Double.class);
-        this.height_total = tuple.get(6, Double.class);
-        this.height_max = tuple.get(7, Double.class);
-        this.height_avg = tuple.get(8, Double.class);
+        this.height_total = tuple.get(6, Integer.class);
+        this.height_max = tuple.get(7, Integer.class);
+        this.height_avg = tuple.get(8, Integer.class);
         this.speed_avg = tuple.get(9, Double.class);
         this.speed_max = tuple.get(10, Double.class);
         this.calorie_total = tuple.get(11, Double.class);
@@ -54,9 +54,9 @@ public class UserProfileDto {
         if(dist_avg == null){
             this.dist_avg = 0.0;
             this.dist_total = 0.0;
-            this.height_total = 0.0;
-            this.height_max = 0.0;
-            this.height_avg = 0.0;
+            this.height_total = 0;
+            this.height_max = 0;
+            this.height_avg = 0;
             this.speed_avg =0.0;
             this.speed_max = 0.0;
             this.calorie_total = 0.0;
@@ -65,8 +65,8 @@ public class UserProfileDto {
         else{
             this.dist_avg = round(dist_avg*100)/100.0;
             this.dist_total = round(dist_total*100)/100.0;
-            this.height_max = round(height_max*10)/10.0;
-            this.height_avg = round(height_avg*10)/10.0;
+            this.height_max = round(height_max);
+            this.height_avg = round(height_avg);
             this.speed_avg = round(speed_avg*100)/100.0;
             this.calorie_avg = round(calorie_avg*10)/10.0;
         }

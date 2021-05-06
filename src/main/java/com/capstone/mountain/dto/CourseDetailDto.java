@@ -18,7 +18,7 @@ public class CourseDetailDto {
     private Double distance;
     private LocalTime time;
     private Double speed;
-    private Double height;
+    private int height;
     private int difficulty;
     private String url;
     private Long review_cnt;
@@ -26,7 +26,7 @@ public class CourseDetailDto {
     private String thumbnail;
 
     @QueryProjection
-    public CourseDetailDto(Long id, String name, String location, Double distance, LocalTime time, Double speed, Double height, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
+    public CourseDetailDto(Long id, String name, String location, Double distance, LocalTime time, Double speed, int height, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
         this.name = name;
         this.location = location;

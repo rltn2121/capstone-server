@@ -29,7 +29,7 @@ public class Course {
     private String name;
     private Double distance;
     private Double speed;
-    private Double height;
+    private int height;
     private String location;
     private int difficulty;
     private LocalTime time;
