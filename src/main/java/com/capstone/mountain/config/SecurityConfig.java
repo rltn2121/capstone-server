@@ -1,5 +1,6 @@
 package com.capstone.mountain.config;
 
+import com.capstone.mountain.jwt.CustomAuthenticationEntryPoint;
 import com.capstone.mountain.jwt.JwtAuthenticationFilter;
 import com.capstone.mountain.jwt.JwtAuthorizationFilter;
 import com.capstone.mountain.repository.UserRepository;
@@ -45,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/search/**", "/course/**", "/mountain/**", "/favorite/**",
                         "/report/**", "/review/**", "/user/**", "/record/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
 }

@@ -8,8 +8,10 @@ import com.capstone.mountain.domain.User;
 import com.capstone.mountain.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,21 +51,26 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // header가 있는지 확인
         if(jwtHeader == null || !jwtHeader.startsWith("Bearer")){
             chain.doFilter(request, response);
-            System.out.println("jwtHeader 없음");
-            throw new MissingServletRequestParameterException("jwtHeader 없음", "jwt");
+            return;
         }
 
         // jwt 토큰 검증해서 정상적인 사용자인지 확인
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
-        String username =
-                JWT.require(Algorithm.HMAC512("cos"))
-                        .build()
-                        .verify(jwtToken)       // 여기서 JWTDecodeException 발생
-                        .getClaim("username")
-                        .asString();
+        String username = "";
+        try{
+            username =
+                    JWT.require(Algorithm.HMAC512("cos"))
+                            .build()
+                            .verify(jwtToken)       // 여기서 JWTDecodeException 발생
+                            .getClaim("username")
+                            .asString();
+        }
+        catch (JWTDecodeException jde){
+            chain.doFilter(request, response);
+            return;
+        }
 
 
-        System.out.println("검증 결과-ㄹ--ㄴㄹ저ㅣㅏㄷ렁나ㅣㅓㅏㅣㅈㅎㅈㅂㅇㄹㄵㅁㅇㄹㅈ");
         if(username != null){
             System.out.println("username = " + username);
             User userEntity = userRepository.findByUsername(username);
@@ -71,16 +79,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
             else
                 System.out.println("userEntity = " + userEntity.getUsername());
+                PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
-            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-            // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체 만듦
-            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+                // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체 만듦
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
-            // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            chain.doFilter(request, response);
+                // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                chain.doFilter(request, response);
         }
     }
-
 }

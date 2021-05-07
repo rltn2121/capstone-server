@@ -65,66 +65,26 @@ public class GlobalRestControllerAdvice {
         errorAttributes.put("data", "");
         return errorAttributes;
     }
-
-    /**
-     *
-     *
-     */
-
-
-    /**
-     * jwt 토큰 잘못됨
-     */
-    @ExceptionHandler(JWTDecodeException.class)
-    public Map<String, String> jwt(JWTDecodeException e) {
+    // JWT 없거나 잘못됨
+    @ExceptionHandler(AccessDeniedException.class)
+    public Map<String, String> forbiddenHandle(AccessDeniedException e) {
         log.error(e.getMessage(), e);
         Map<String, String> errorAttributes = new HashMap<>();
-        errorAttributes.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
-        errorAttributes.put("message", "jwt 토큰 잘못됨");
+        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
+        errorAttributes.put("message", e.getMessage());
         errorAttributes.put("data", "");
         return errorAttributes;
     }
-
+    /**
+     *
+     *
+     */
 
     /**
      * uri 잘못됨      (404)
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public Map<String, String> nfHandle(NoHandlerFoundException e) {
-        log.error(e.getMessage(), e);
-        Map<String, String> errorAttributes = new HashMap<>();
-        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
-        errorAttributes.put("message", "404");
-        errorAttributes.put("data", "");
-        return errorAttributes;
-    }
-
-    /**
-     * jwt 추가안함 또는 Bearer로 시작안함:    (403)
-     */
-    @ExceptionHandler(AccessDeniedException.class)
-    public Map<String, String> forbiddenHandle(AccessDeniedException e) {
-        log.error(e.getMessage(), e);
-        Map<String, String> errorAttributes = new HashMap<>();
-        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
-        errorAttributes.put("message", "404");
-        errorAttributes.put("data", "");
-        return errorAttributes;
-    }
-
-
-    @ExceptionHandler(IOException.class)
-    public Map<String, String> ioeHandle(IOException e) {
-        log.error(e.getMessage(), e);
-        Map<String, String> errorAttributes = new HashMap<>();
-        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
-        errorAttributes.put("message", "404");
-        errorAttributes.put("data", "");
-        return errorAttributes;
-    }
-
-    @ExceptionHandler(ServletException.class)
-    public Map<String, String> servHandle(ServletException e) {
         log.error(e.getMessage(), e);
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
