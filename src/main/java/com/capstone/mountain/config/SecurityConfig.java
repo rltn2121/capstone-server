@@ -42,9 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .authorizeRequests()
-                .antMatchers("/search/**", "/course/**", "/mountain/**", "/favorite/**", "/report/**", "/review/**", "/user/**", "/record/**")
+                .antMatchers("/search/**", "/course/**", "/mountain/**", "/favorite/**",
+                        "/report/**", "/review/**", "/user/**", "/record/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll();
-
     }
 }

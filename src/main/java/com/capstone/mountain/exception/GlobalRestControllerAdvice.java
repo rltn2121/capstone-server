@@ -16,6 +16,7 @@ import javax.jdo.annotations.Order;
 import javax.naming.AuthenticationException;
 import javax.servlet.ServletException;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +55,6 @@ public class GlobalRestControllerAdvice {
         errorAttributes.put("data", "");
         return errorAttributes;
     }
-
     // 네이버 액세스 토큰 추가안함
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Map<String, String> nonavertokenHandle(HttpMessageNotReadableException e) {
@@ -112,4 +112,24 @@ public class GlobalRestControllerAdvice {
         return errorAttributes;
     }
 
+
+    @ExceptionHandler(IOException.class)
+    public Map<String, String> ioeHandle(IOException e) {
+        log.error(e.getMessage(), e);
+        Map<String, String> errorAttributes = new HashMap<>();
+        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
+        errorAttributes.put("message", "404");
+        errorAttributes.put("data", "");
+        return errorAttributes;
+    }
+
+    @ExceptionHandler(ServletException.class)
+    public Map<String, String> servHandle(ServletException e) {
+        log.error(e.getMessage(), e);
+        Map<String, String> errorAttributes = new HashMap<>();
+        errorAttributes.put("status", HttpStatus.NOT_FOUND.toString());
+        errorAttributes.put("message", "404");
+        errorAttributes.put("data", "");
+        return errorAttributes;
+    }
 }

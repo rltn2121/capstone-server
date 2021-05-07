@@ -12,7 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.FilterChain;
@@ -26,6 +29,8 @@ import java.util.Map;
 // 시큐리티가 filter 가지고 있는데, 그 필터 중에 BasicAuthenticationFilter라는 것이 있음.
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 위 필터를 무조건 타게 되어있음.
 // 만약, 권한이나 인증이 필요한 주소가 아니라면 이 필터를 타지 않음.
+
+@RestController
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private UserRepository userRepository;
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
@@ -43,7 +48,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // header가 있는지 확인
         if(jwtHeader == null || !jwtHeader.startsWith("Bearer")){
             chain.doFilter(request, response);
-            return;
+            System.out.println("jwtHeader 없음");
+            throw new MissingServletRequestParameterException("jwtHeader 없음", "jwt");
         }
 
         // jwt 토큰 검증해서 정상적인 사용자인지 확인
@@ -51,10 +57,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String username =
                 JWT.require(Algorithm.HMAC512("cos"))
                         .build()
-                        .verify(jwtToken)
+                        .verify(jwtToken)       // 여기서 JWTDecodeException 발생
                         .getClaim("username")
                         .asString();
 
+
+        System.out.println("검증 결과-ㄹ--ㄴㄹ저ㅣㅏㄷ렁나ㅣㅓㅏㅣㅈㅎㅈㅂㅇㄹㄵㅁㅇㄹㅈ");
         if(username != null){
             System.out.println("username = " + username);
             User userEntity = userRepository.findByUsername(username);
