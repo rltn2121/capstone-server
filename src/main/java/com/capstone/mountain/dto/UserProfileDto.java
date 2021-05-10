@@ -39,36 +39,16 @@ public class UserProfileDto {
         this.nickname = tuple.get(1, String.class);
         this.weight = tuple.get(2, Integer.class);
         this.height = tuple.get(3, Integer.class);
-        this.dist_total = tuple.get(4, Double.class);
-        this.dist_avg = tuple.get(5, Double.class);
-        this.height_total = tuple.get(6, Integer.class);
-        this.height_max = tuple.get(7, Integer.class);
-        this.height_avg = (int)Math.round(tuple.get(8, Double.class));
-        this.speed_avg = tuple.get(9, Double.class);
-        this.speed_max = tuple.get(10, Double.class);
-        this.calorie_total = (int)Math.round(tuple.get(11, Integer.class));
-        this.calorie_avg = (int)Math.round(tuple.get(12, Double.class));
+        this.dist_total = tuple.get(4, Double.class) == null?0.0:round(tuple.get(4, Double.class)*100)/100.0;
+        this.dist_avg = tuple.get(5, Double.class)==null?0.0:round(tuple.get(5, Double.class)*100)/100.0;
+        this.height_total = (tuple.get(6, Integer.class) == null ? 0 : tuple.get(6, Integer.class));
+        this.height_max = tuple.get(7, Integer.class) == null ? 0 : tuple.get(7, Integer.class);
+        this.height_avg = tuple.get(8, Double.class) == null ? 0 : (int)Math.round(tuple.get(8, Double.class));
+        this.speed_avg = tuple.get(9, Double.class) == null ? 0.0 : round(tuple.get(9, Double.class)*100)/100.0;
+        this.speed_max = tuple.get(10, Double.class) == null ? 0.0 : tuple.get(10, Double.class);
+        this.calorie_total = tuple.get(11, Integer.class) == null ? 0 : (int)round(tuple.get(11, Integer.class));
+        this.calorie_avg = tuple.get(12, Double.class) == null ? 0 : (int)round(tuple.get(12, Double.class));
         this.duration_total = duration_total;
         this.duration_avg = duration_avg;
-
-        if(dist_avg == null){
-            this.dist_avg = 0.0;
-            this.dist_total = 0.0;
-            this.height_total = 0;
-            this.height_max = 0;
-            this.height_avg = 0;
-            this.speed_avg =0.0;
-            this.speed_max = 0.0;
-            this.calorie_total = 0;
-            this.calorie_avg = 0;
-        }
-        else{
-            this.dist_avg = round(dist_avg*100)/100.0;
-            this.dist_total = round(dist_total*100)/100.0;
-            this.height_max = round(height_max);
-            this.height_avg = round(height_avg);
-            this.speed_avg = round(speed_avg*100)/100.0;
-            this.calorie_avg = round(calorie_avg);
-        }
     }
 }

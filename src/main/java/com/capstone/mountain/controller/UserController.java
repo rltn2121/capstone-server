@@ -90,10 +90,12 @@ public class UserController{
      * @return 사용자 프로필
      */
     @GetMapping("/user/{user_id}")
-    public ResponseEntity<Message> getUsserProfile(@PathVariable("user_id") Long id){
+    public ResponseEntity<Message> getUserProfile(@PathVariable("user_id") Long id){
+        Optional<User> user = userService.findById(id);
+        user.orElseThrow(() -> new NoResultException("존재하지 않는 사용자입니다."));
 
         UserProfileDto userProfile = userService.getUserProfile(id);
-        if(userProfile.getId() == 0){
+        if(userProfile == null){
             throw new NoResultException("조회 결과 없음.");
         }
         Message message = new Message();

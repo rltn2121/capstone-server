@@ -85,7 +85,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     }
 
     private List<LocalTime> getLocalTimes(Long userId) {
-        System.out.println("getLocalTimes 실행됨");
         return queryFactory
                 .select(record.duration)
                 .from(record)

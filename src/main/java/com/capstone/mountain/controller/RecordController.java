@@ -38,7 +38,7 @@ public class RecordController {
     @GetMapping("/record/{record_id}")
     public ResponseEntity<Message> findRecordDetail(@PathVariable("record_id") Long id){
         RecordDetailDto recordDetail = recordService.findRecordDetail(id);
-        if(recordDetail.getId() == null){
+        if(recordDetail == null){
             throw new NoResultException("조회 결과 없음.");
         }
         Message message = new Message();
