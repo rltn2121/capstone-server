@@ -39,5 +39,5 @@ public class Record {
     private Double speed;
     private int height;
     private String name;
-    private Double calorie;
+    private int calorie;
 }

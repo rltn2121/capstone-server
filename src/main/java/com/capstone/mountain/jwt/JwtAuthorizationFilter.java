@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.capstone.mountain.auth.PrincipalDetails;
 import com.capstone.mountain.domain.User;
 import com.capstone.mountain.repository.UserRepository;
@@ -66,7 +67,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                             .getClaim("username")
                             .asString();
         }
-        catch (JWTDecodeException | SignatureVerificationException e){
+        catch (JWTDecodeException | SignatureVerificationException | TokenExpiredException e){
             chain.doFilter(request, response);
             return;
         }

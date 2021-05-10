@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAmount;
 
 @Data
 @NoArgsConstructor
@@ -16,27 +18,27 @@ public class RecordDetailDto {
     private String name;
     private String thumbnail;
 
-    private LocalTime duration;
-    private LocalTime movingTime;
-    private LocalTime restTime;
+    private String duration;
+    private String movingTime;
+    private String restTime;
     private Double distance;
     private Double speed;
     private int height;
-    private Double calorie;
-    private LocalDateTime date;
+    private int calorie;
+    private String date;
 
     @QueryProjection
-    public RecordDetailDto(Long id, String name, String thumbnail, LocalTime duration, LocalTime movingTime, Double distance, Double speed, int height, Double calorie, LocalDateTime date) {
+    public RecordDetailDto(Long id, String name, String thumbnail, LocalTime duration, LocalTime movingTime, Double distance, Double speed, int height, int calorie, LocalDateTime date) {
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
-        this.duration = duration;
-        this.movingTime = movingTime;
-        this.restTime = LocalTime.of(0,0,0);
+        this.duration = duration.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
+        this.movingTime = movingTime.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
+        this.restTime = (duration.getHour() - movingTime.getHour()) + "시간 " + (duration.getMinute() - movingTime.getMinute()) + "분 " + (duration.getSecond() - movingTime.getSecond()) + "초";
         this.distance = distance;
         this.speed = speed;
         this.height = height;
         this.calorie = calorie;
-        this.date = date;
+        this.date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
     }
 }

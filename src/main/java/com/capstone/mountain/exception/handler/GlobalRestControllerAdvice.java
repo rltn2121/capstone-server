@@ -36,7 +36,7 @@ public class GlobalRestControllerAdvice {
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "BAD_REQUEST");
         errorAttributes.put("message", "쿼리 파라미터 추가안함");
-        errorAttributes.put("data", "");
+//        errorAttributes.put("data", "");
         return errorAttributes;
     }
     // 네이버 액세스 토큰 잘못됨
@@ -46,7 +46,7 @@ public class GlobalRestControllerAdvice {
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "UNAUTHORIZED");
         errorAttributes.put("message", "네이버 액세스 토큰 잘못됨");
-        errorAttributes.put("data", "");
+//        errorAttributes.put("data", "");
         return errorAttributes;
     }
     // 네이버 액세스 토큰 추가안함
@@ -56,7 +56,7 @@ public class GlobalRestControllerAdvice {
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "UNAUTHORIZED");
         errorAttributes.put("message", "네이버 액세스 토큰 추가안함");
-        errorAttributes.put("data", "");
+//        errorAttributes.put("data", "");
         return errorAttributes;
     }
     // JWT 없거나 잘못됨
@@ -66,7 +66,7 @@ public class GlobalRestControllerAdvice {
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "UNAUTHORIZED");
         errorAttributes.put("message", e.getMessage());
-        errorAttributes.put("data", "");
+//        errorAttributes.put("data", "");
         return errorAttributes;
     }
 
@@ -77,7 +77,7 @@ public class GlobalRestControllerAdvice {
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "NO_CONTENT");
         errorAttributes.put("message", e.getMessage());
-        errorAttributes.put("data", "");
+//        errorAttributes.put("data", "");
         return errorAttributes;
     }
 //    // URI 잘못됨
@@ -88,6 +88,5 @@ public class GlobalRestControllerAdvice {
 //        errorAttributes.put("status", "NOT_FOUND");
 //        errorAttributes.put("message", "잘못된 요청입니다. URI를 확인해주세요.");
 //        errorAttributes.put("data", "");
-//        return errorAttributes;
-//    }
+//        return errorAttributes; }
 }

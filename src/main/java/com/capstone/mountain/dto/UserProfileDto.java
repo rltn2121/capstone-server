@@ -30,8 +30,8 @@ public class UserProfileDto {
     private int height_avg;  // 평균 높이
     private Double speed_avg;   // 평균 속도
     private Double speed_max;   // 최고 속도
-    private Double calorie_total;  // 총 소모 칼로리
-    private Double calorie_avg; // 평균 소모 칼로리
+    private int calorie_total;  // 총 소모 칼로리
+    private int calorie_avg; // 평균 소모 칼로리
 
     @QueryProjection
     public UserProfileDto(Tuple tuple, String duration_total, String duration_avg) {
@@ -43,11 +43,11 @@ public class UserProfileDto {
         this.dist_avg = tuple.get(5, Double.class);
         this.height_total = tuple.get(6, Integer.class);
         this.height_max = tuple.get(7, Integer.class);
-        this.height_avg = tuple.get(8, Integer.class);
+        this.height_avg = (int)Math.round(tuple.get(8, Double.class));
         this.speed_avg = tuple.get(9, Double.class);
         this.speed_max = tuple.get(10, Double.class);
-        this.calorie_total = tuple.get(11, Double.class);
-        this.calorie_avg = tuple.get(12, Double.class);
+        this.calorie_total = (int)Math.round(tuple.get(11, Integer.class));
+        this.calorie_avg = (int)Math.round(tuple.get(12, Double.class));
         this.duration_total = duration_total;
         this.duration_avg = duration_avg;
 
@@ -59,8 +59,8 @@ public class UserProfileDto {
             this.height_avg = 0;
             this.speed_avg =0.0;
             this.speed_max = 0.0;
-            this.calorie_total = 0.0;
-            this.calorie_avg = 0.0;
+            this.calorie_total = 0;
+            this.calorie_avg = 0;
         }
         else{
             this.dist_avg = round(dist_avg*100)/100.0;
@@ -68,7 +68,7 @@ public class UserProfileDto {
             this.height_max = round(height_max);
             this.height_avg = round(height_avg);
             this.speed_avg = round(speed_avg*100)/100.0;
-            this.calorie_avg = round(calorie_avg*10)/10.0;
+            this.calorie_avg = round(calorie_avg);
         }
     }
 }

@@ -49,6 +49,10 @@ public class CourseController {
         message.setStatus(OK);
         message.setMessage("조회 성공");
         message.setData(coursePreviewDtos);
+        for (CoursePreviewDto coursePreviewDto : coursePreviewDtos) {
+            System.out.println("coursePreviewDto = " + coursePreviewDto);
+
+        }
         return new ResponseEntity<>(message, OK);
     }
 }

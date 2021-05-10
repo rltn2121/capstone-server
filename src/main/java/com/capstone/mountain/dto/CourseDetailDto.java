@@ -16,7 +16,7 @@ public class CourseDetailDto {
     private String name;
     private String location;
     private Double distance;
-    private LocalTime time;
+    private String time;
     private Double speed;
     private int height;
     private int difficulty;
@@ -31,13 +31,13 @@ public class CourseDetailDto {
         this.name = name;
         this.location = location;
         this.distance = distance;
-        this.time = time;
+        this.time = (time == null) ? "0시간 0분 0초" : time.getHour() + "시간 " + time.getMinute() + "분 " + time.getSecond() + "초";
         this.speed = speed;
         this.height = height;
         this.difficulty = difficulty;
         this.url = url;
         this.review_cnt = review_cnt;
-        this.score = (score == null ? 0 : score);
+        this.score = (score == null ? 0 : Math.round(score*10)/10.0);
         this.thumbnail = thumbnail;
     }
 }

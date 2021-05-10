@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +17,7 @@ public class CoursePreviewDto {
     private String name;
     private Double distance;
     private int height;
-    private LocalTime time;
+    private String time;
     private int difficulty;
     private String url;
     private Long review_cnt;
@@ -29,11 +30,11 @@ public class CoursePreviewDto {
         this.name = (name.length() > 20 ? name.substring(0, 17) + "..." : name);
         this.distance = distance;
         this.height = height;
-        this.time = time;
+        this.time = time.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
         this.difficulty = difficulty;
         this.url = url;
         this.review_cnt = review_cnt;
-        this.score = (score == null ? 0 : score);
+        this.score = (score == null ? 0 : Math.round(score*10)/10.0);
         this.thumbnail = thumbnail;
     }
 }
