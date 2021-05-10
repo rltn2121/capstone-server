@@ -4,6 +4,7 @@ import com.capstone.mountain.Message;
 import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.RecordDetailDto;
 import com.capstone.mountain.dto.RecordPreviewDto;
+import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class RecordController {
     @GetMapping("/record")
     public ResponseEntity<Message> findRecords(@RequestParam("user") Long id){
         List<RecordPreviewDto> records = recordService.findRecords(id);
+        if(records.size() == 0){
+            throw new NoResultException("조회 결과 없음.");
+        }
         Message message = new Message();
         message.setStatus(OK);
         message.setMessage("조회 성공");
@@ -34,6 +38,9 @@ public class RecordController {
     @GetMapping("/record/{record_id}")
     public ResponseEntity<Message> findRecordDetail(@PathVariable("record_id") Long id){
         RecordDetailDto recordDetail = recordService.findRecordDetail(id);
+        if(recordDetail.getId() == null){
+            throw new NoResultException("조회 결과 없음.");
+        }
         Message message = new Message();
         message.setStatus(OK);
         message.setMessage("조회 성공");

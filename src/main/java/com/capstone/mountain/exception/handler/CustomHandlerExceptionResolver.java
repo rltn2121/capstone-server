@@ -1,4 +1,4 @@
-package com.capstone.mountain.exception;
+package com.capstone.mountain.exception.handler;
 
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;

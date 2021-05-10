@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @ToString
 public class RecordPreviewDto {
+    private Long id;
     private String name;
     private Double distance;
     private int height;
@@ -20,7 +21,8 @@ public class RecordPreviewDto {
 
     @QueryProjection
 
-    public RecordPreviewDto(String name, Double distance, int height, LocalTime time, Double calorie, String thumbnail) {
+    public RecordPreviewDto(Long id, String name, Double distance, int height, LocalTime time, Double calorie, String thumbnail) {
+        this.id = id;
         this.name = name;
         this.distance = distance;
         this.height = height;

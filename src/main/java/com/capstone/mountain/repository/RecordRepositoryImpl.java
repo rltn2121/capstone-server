@@ -19,6 +19,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
     public List<RecordPreviewDto> findRecordPreview(Long userId) {
         return queryFactory
                 .select(new QRecordPreviewDto(
+                        record.id,
                         record.name,
                        record.distance,
                         record.height,
@@ -36,6 +37,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
     public RecordDetailDto findRecordDetail(Long recordId) {
         return queryFactory
                 .select(new QRecordDetailDto(
+                        record.id,
                         record.name,
                         record.thumbnail,
                         record.duration,

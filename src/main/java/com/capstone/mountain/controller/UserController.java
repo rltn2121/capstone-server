@@ -10,6 +10,7 @@ import com.capstone.mountain.auth.PrincipalDetails;
 import com.capstone.mountain.domain.User;
 import com.capstone.mountain.dto.AccessTokenDto;
 import com.capstone.mountain.dto.UserProfileDto;
+import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -90,18 +91,16 @@ public class UserController{
      */
     @GetMapping("/user/{user_id}")
     public ResponseEntity<Message> getUsserProfile(@PathVariable("user_id") Long id){
-        Message message = new Message();
 
         UserProfileDto userProfile = userService.getUserProfile(id);
-        if(userProfile == null){
-            message.setMessage("존재하지 않는 사용자입니다.");
-            message.setStatus(BAD_REQUEST);
+        if(userProfile.getId() == 0){
+            throw new NoResultException("조회 결과 없음.");
         }
-        else{
-            message.setMessage("조회 성공");
-            message.setStatus(OK);
-            message.setData(userProfile);
-        }
+        Message message = new Message();
+        message.setMessage("조회 성공");
+        message.setStatus(OK);
+        message.setData(userProfile);
+
         return new ResponseEntity<>(message, message.getStatus());
     }
 

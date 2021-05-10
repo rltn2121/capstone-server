@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @ToString
 public class RecordDetailDto {
+    private Long id;
     private String name;
     private String thumbnail;
 
@@ -25,7 +26,8 @@ public class RecordDetailDto {
     private LocalDateTime date;
 
     @QueryProjection
-    public RecordDetailDto(String name, String thumbnail, LocalTime duration, LocalTime movingTime, Double distance, Double speed, int height, Double calorie, LocalDateTime date) {
+    public RecordDetailDto(Long id, String name, String thumbnail, LocalTime duration, LocalTime movingTime, Double distance, Double speed, int height, Double calorie, LocalDateTime date) {
+        this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
         this.duration = duration;

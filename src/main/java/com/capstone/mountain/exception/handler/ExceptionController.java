@@ -1,4 +1,4 @@
-package com.capstone.mountain.controller;
+package com.capstone.mountain.exception.handler;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import lombok.RequiredArgsConstructor;
