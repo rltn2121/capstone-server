@@ -49,7 +49,7 @@ public class UserController{
      * 기능: 사용자 프로필 수정
      * @return 성공 여부 메시지
      */
-    @PatchMapping("/profile")
+    @PatchMapping("/user")
     public ResponseEntity<Message> updateProfile(HttpServletRequest request,
                                                  @RequestBody Map<String, String> req){
         Message message = new Message();
@@ -82,7 +82,7 @@ public class UserController{
      * 기능: 사용자 프로필 조회
      * @return 사용자 프로필
      */
-    @GetMapping("/profile")
+    @GetMapping("/user")
     public ResponseEntity<Message> getUserProfile(HttpServletRequest request){
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = getUserFromJWT(jwtToken);
