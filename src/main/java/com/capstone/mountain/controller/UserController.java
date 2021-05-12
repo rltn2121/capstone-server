@@ -49,7 +49,7 @@ public class UserController{
      * 기능: 사용자 프로필 수정
      * @return 성공 여부 메시지
      */
-    @PatchMapping("/user/{user_id}")
+    @PatchMapping("/profile/{user_id}")
     public ResponseEntity<Message> updateProfile(HttpServletRequest request,
                                                 @PathVariable Long user_id,
                                                  @RequestBody Map<String, String> req){
@@ -89,7 +89,7 @@ public class UserController{
      * 기능: 사용자 프로필 조회
      * @return 사용자 프로필
      */
-    @GetMapping("/user/{user_id}")
+    @GetMapping("/profile/{user_id}")
     public ResponseEntity<Message> getUserProfile(@PathVariable("user_id") Long id){
         Optional<User> user = userService.findById(id);
         user.orElseThrow(() -> new NoResultException("존재하지 않는 사용자입니다."));

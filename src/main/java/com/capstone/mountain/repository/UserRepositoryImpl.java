@@ -49,7 +49,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         record.speed.avg(),
                         record.speed.max(),
                         record.calorie.sum(),
-                        record.calorie.avg()
+                        record.calorie.avg(),
+                        user.url
                 )
                 .from(record)
                 .rightJoin(record.user, user)
