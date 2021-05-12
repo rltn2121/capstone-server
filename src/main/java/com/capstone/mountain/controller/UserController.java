@@ -49,31 +49,24 @@ public class UserController{
      * 기능: 사용자 프로필 수정
      * @return 성공 여부 메시지
      */
-    @PatchMapping("/profile/{user_id}")
+    @PatchMapping("/profile")
     public ResponseEntity<Message> updateProfile(HttpServletRequest request,
-                                                @PathVariable Long user_id,
                                                  @RequestBody Map<String, String> req){
         Message message = new Message();
 
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+        User user = getUserFromJWT(jwtToken);
         String nickname = req.get("nickname");
         int height = Integer.parseInt(req.get("height"));
         int weight = Integer.parseInt(req.get("weight"));
-        
-        boolean isValid = userService.checkValidUser(jwtToken, user_id);
-        if(!isValid){
+
+        if(userService.isNicknameDuplicate(nickname)) {
             message.setStatus(BAD_REQUEST);
-            message.setMessage("다른 사용자의 프로필을 변경할 수 없습니다.");
+            message.setMessage("이미 존재하는 닉네임입니다.");
             return new ResponseEntity<>(message, message.getStatus());
         }
-//
-//        if(userService.isNicknameDuplicate(nickname)) {
-//            message.setStatus(BAD_REQUEST);
-//            message.setMessage("이미 존재하는 닉네임입니다.");
-//            return new ResponseEntity<>(message, message.getStatus());
-//        }
 
-        Boolean result = userService.updateProfile(user_id, nickname, height, weight);
+        Boolean result = userService.updateProfile(user.getId(), nickname, height, weight);
         if(result){
             message.setStatus(CREATED);
             message.setMessage("프로필을 성공적으로 변경했습니다.");
@@ -89,12 +82,12 @@ public class UserController{
      * 기능: 사용자 프로필 조회
      * @return 사용자 프로필
      */
-    @GetMapping("/profile/{user_id}")
-    public ResponseEntity<Message> getUserProfile(@PathVariable("user_id") Long id){
-        Optional<User> user = userService.findById(id);
-        user.orElseThrow(() -> new NoResultException("존재하지 않는 사용자입니다."));
+    @GetMapping("/profile")
+    public ResponseEntity<Message> getUserProfile(HttpServletRequest request){
+        String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+        User user = getUserFromJWT(jwtToken);
 
-        UserProfileDto userProfile = userService.getUserProfile(id);
+        UserProfileDto userProfile = userService.getUserProfile(user.getId());
         if(userProfile == null){
             throw new NoResultException("조회 결과 없음.");
         }
@@ -104,6 +97,17 @@ public class UserController{
         message.setData(userProfile);
 
         return new ResponseEntity<>(message, message.getStatus());
+    }
+
+    private User getUserFromJWT(String jwtToken) {
+        String username =
+                    JWT.require(Algorithm.HMAC512("cos"))
+                            .build()
+                            .verify(jwtToken)       // 여기서 JWTDecodeException 발생
+                            .getClaim("username")
+                            .asString();
+        User user = userService.findByUsername(username);
+        return user;
     }
 
     @GetMapping("/auth/kakao/callback")
