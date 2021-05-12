@@ -61,9 +61,11 @@ public class UserController{
         int weight = Integer.parseInt(req.get("weight"));
 
         if(userService.isNicknameDuplicate(nickname)) {
-            message.setStatus(BAD_REQUEST);
-            message.setMessage("이미 존재하는 닉네임입니다.");
-            return new ResponseEntity<>(message, message.getStatus());
+            if(!nickname.equals(user.getNickname())){
+                message.setStatus(BAD_REQUEST);
+                message.setMessage("이미 존재하는 닉네임입니다.");
+                return new ResponseEntity<>(message, message.getStatus());
+            }
         }
 
         Boolean result = userService.updateProfile(user.getId(), nickname, height, weight);

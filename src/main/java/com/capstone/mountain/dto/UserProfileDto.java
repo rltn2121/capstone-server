@@ -39,7 +39,7 @@ public class UserProfileDto {
         this.nickname = tuple.get(1, String.class);
         this.user_height_weight = (tuple.get(3, Integer.class)==0?"-":tuple.get(3, Integer.class))
                 + "cm / "
-                + (tuple.get(3, Integer.class)==0?"-":tuple.get(3, Integer.class)) + "kg";
+                + (tuple.get(2, Integer.class)==0?"-":tuple.get(2, Integer.class)) + "kg";
         this.total_distance = (tuple.get(4, Double.class) == null?0.0:round(tuple.get(4, Double.class)*100)/100.0 )+ "km";
         this.avg_distance = (tuple.get(5, Double.class)==null?0.0:round(tuple.get(5, Double.class)*100)/100.0)+ "km";
         this.total_height = (tuple.get(6, Integer.class) == null ? 0 : tuple.get(6, Integer.class))+ "m";
