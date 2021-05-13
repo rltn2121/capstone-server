@@ -68,6 +68,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                             .asString();
         }
         catch (JWTDecodeException | SignatureVerificationException | TokenExpiredException e){
+            e.printStackTrace();
             chain.doFilter(request, response);
             return;
         }
