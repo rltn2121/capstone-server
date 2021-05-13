@@ -49,7 +49,7 @@ public class UserProfileDto {
         this.max_speed = (tuple.get(10, Double.class) == null ? 0.0 : tuple.get(10, Double.class))+ "km/h";
         this.total_calories = (tuple.get(11, Integer.class) == null ? 0 : (int)round(tuple.get(11, Integer.class))) + "kcal";
         this.avg_calories = (tuple.get(12, Double.class) == null ? 0 : (int)round(tuple.get(12, Double.class)))+"kcal";
-        this.picture = tuple.get(13, String.class);
+        this.picture = (tuple.get(13, String.class)==null)?"no_image":tuple.get(13, String.class);
         this.total_time = duration_total;
         this.avg_time = duration_avg;
     }

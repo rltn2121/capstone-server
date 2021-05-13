@@ -292,9 +292,8 @@ public class UserController{
 
     @PostMapping("/naver-login")
     public ResponseEntity<Message> naverLogin(@RequestBody Map<String, String> req, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("req.get 이전");
         String access_token = req.get("access_token");
-        System.out.println("req.get 이후");
+        System.out.println("access_token = " + access_token);
         RestTemplate rt2 = new RestTemplate();
 
         // HttpHeader 오브젝트 생성
