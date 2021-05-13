@@ -270,38 +270,24 @@ public class UserController{
     @PostMapping("/join")
     // username, nickname, password는 임의로 생성
     public ResponseEntity<Message> join(@RequestBody Map<String, String> req, HttpServletResponse response) {
-        Message message = new Message();
         String username = req.get("username");
         String nickname = req.get("nickname");
         String password = "qwerty123";
 
+        // username 존재하는지 확인
+        User user = userService.findByUsername(username);
 
-        // 있으면 리턴, 없으면 new User()
-        User searchUser = userService.chkUserExist(username);
-        if(searchUser.getUsername() != null){
-            message.setStatus(BAD_REQUEST);
-            message.setMessage("이미 존재하는 username 입니다.");
-            return new ResponseEntity<>(message, message.getStatus());
-        }
-//        else if(userService.isNicknameDuplicate(nickname)) {
-//            message.setStatus(BAD_REQUEST);
-//            message.setMessage("이미 존재하는 닉네임입니다.");
-//            return new ResponseEntity<>(message, message.getStatus());
-//        }
-        else{
+        // username이 없으면 회원가입 시키기
+        if(user == null) {
             System.out.println("사용할 수 있는 username입니다.");
-            User newUser = new User();
-            newUser.setUsername(username);
-            newUser.setPassword(password);
-            newUser.setNickname(nickname);
-            searchUser = userService.join(newUser);
-            message.setStatus(CREATED);
-            message.setMessage("회원가입 성공");
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setNickname(nickname);
+            userService.join(user);
             System.out.println("회원가입 성공");
         }
-
-        System.out.println("인코딩 후 패스워드: " + searchUser.getPassword());
-        return autoLogin(response, password, searchUser);
+        return autoLogin(response, password, user);
     }
 
     @PostMapping("/naver-login")
@@ -354,7 +340,6 @@ public class UserController{
             originUser.setPassword(password);
             userService.join(originUser);
         }
-
         return autoLogin(response, password, originUser);
     }
 
@@ -376,7 +361,7 @@ public class UserController{
                     .sign(Algorithm.HMAC512("cos"));
             response.addHeader("Authorization", "Bearer " + jwtToken);
             message.setStatus(OK);
-            message.setMessage("조회 성공");
+            message.setMessage("로그인 성공");
             message.setData(new AccessTokenDto(jwtToken));
             return new ResponseEntity<>(message, OK);
         } catch (AuthenticationException e) {

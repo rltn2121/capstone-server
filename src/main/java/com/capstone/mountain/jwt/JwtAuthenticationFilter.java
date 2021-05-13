@@ -31,41 +31,44 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter: 로그인 시도 중");
-
         try {
             ObjectMapper om = new ObjectMapper();
             User user = om.readValue(request.getInputStream(), User.class);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
+
             // 2. 정상인지 로그인 시도
             // authenticationManager로 로그인 시도
             // -> PrincipalDetailsService가 호출
             // -> loadUserByUsername() 함수 실행됨
             // 정상이면 authentication이 리턴됨, DB에 있는 username과 password가 일치한다.
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            Authentication authentication = null;
+            try{
 
+                authentication = authenticationManager.authenticate(authenticationToken);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+
+            System.out.println("*********************");
             // 3. PrincipalDetails를 세션에 담음 (권한 관리를 위해서)
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
+            System.out.println("---------------------");
             // authentication 객체가 session 영역에 저장됨 => 로그인이 되었다는 뜻
             System.out.println("로그인이 되었다는 뜻 =>" + principalDetails.getUser().getUsername());
             
             // authentication 객체가 session 영역에 저장을 해야하고 그 방법이 return 해주면 됨
             // 리턴 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고 하는것
             // 굳이 jwt 토큰을 사용하면서 세션을 만들 이유가 없음. 근데 단지 권한 처리 때문에 session에 넣어줌
-
-            /**
-             * 인증이 정상적으로 되었으면 jwt 생성하기 (확인 필수)
-             *
-             */
             return authentication;
         } catch (IOException e) {
             e.printStackTrace();
         }
        return null;
     }
-
     // attemptAuthentication 실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수가 실행됨
     // JWT 토큰을 만들어서 요청한 사용자에게 JWT 토큰을 응답해주면 됨
     @Override

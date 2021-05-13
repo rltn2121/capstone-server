@@ -4,7 +4,8 @@ spring:
     username: hugebird
     password: 5ab5c87a
     driver-class-name: org.mariadb.jdbc.Driver
-
+    hikari.idle-timeout: 300
+    hikari.max-lifetime: 300
   jpa:
     hibernate:
       ddl-auto: none
