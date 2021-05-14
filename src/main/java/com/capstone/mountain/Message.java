@@ -15,4 +15,9 @@ public class Message {
         this.data = null;
         this.message = "로그인이 필요한 서비스입니다.";
     }
+
+    public Message(HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 }

@@ -50,9 +50,9 @@ public class UserController{
      * @return 성공 여부 메시지
      */
     @PostMapping("/user")
-    public ResponseEntity<Message> updateProfile(HttpServletRequest request,
+    public Map<String, String> updateProfile(HttpServletRequest request,
                                                  @RequestBody Map<String, String> req){
-        Message message = new Message();
+        Map<String, String> message = new HashMap<>();
 
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = getUserFromJWT(jwtToken);
@@ -62,22 +62,22 @@ public class UserController{
 
         if(userService.isNicknameDuplicate(nickname)) {
             if(!nickname.equals(user.getNickname())){
-                message.setStatus(BAD_REQUEST);
-                message.setMessage("이미 존재하는 닉네임입니다.");
-                return new ResponseEntity<>(message, message.getStatus());
+                message.put("status", "BAD_REQUEST");
+                message.put("message", "이미 존재하는 닉네임입니다.");
+                return message;
             }
         }
 
         Boolean result = userService.updateProfile(user.getId(), nickname, height, weight);
         if(result){
-            message.setStatus(CREATED);
-            message.setMessage("프로필을 성공적으로 변경했습니다.");
+            message.put("status", "OK");
+            message.put("message", "프로필을 성공적으로 변경했습니다.");
         }
         else{
-            message.setStatus(BAD_REQUEST);
-            message.setMessage("프로필 변경 중 오류가 발생했습니다.");
+            message.put("status", "BAD_REQUEST");
+            message.put("message", "프로필 변경 중 오류가 발생했습니다.");
         }
-        return new ResponseEntity<>(message, message.getStatus());
+        return message;
     }
 
     /**
