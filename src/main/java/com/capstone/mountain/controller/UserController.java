@@ -62,7 +62,7 @@ public class UserController{
 
         if(userService.isNicknameDuplicate(nickname)) {
             if(!nickname.equals(user.getNickname())){
-                message.put("status", "BAD_REQUEST");
+                message.put("status", "DUPLICATE");
                 message.put("message", "이미 존재하는 닉네임입니다.");
                 return message;
             }
