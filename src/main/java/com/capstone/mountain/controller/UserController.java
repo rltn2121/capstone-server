@@ -49,7 +49,7 @@ public class UserController{
      * 기능: 사용자 프로필 수정
      * @return 성공 여부 메시지
      */
-    @PatchMapping("/user")
+    @PostMapping("/user")
     public ResponseEntity<Message> updateProfile(HttpServletRequest request,
                                                  @RequestBody Map<String, String> req){
         Message message = new Message();
