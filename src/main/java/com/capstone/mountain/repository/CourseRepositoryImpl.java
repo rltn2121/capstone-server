@@ -1,12 +1,19 @@
 package com.capstone.mountain.repository;
 
+import com.capstone.mountain.domain.Course;
 import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.dto.QCourseDetailDto;
 import com.capstone.mountain.dto.QCoursePreviewDto;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -19,17 +26,17 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<CoursePreviewDto> searchCourses(String keyword, String cond) {
-        return queryFactory
+    public Page<CoursePreviewDto> searchCourses(String keyword, String cond, Pageable pageable) {
+        List<CoursePreviewDto> content = queryFactory
                 .select(
                         new QCoursePreviewDto(
                                 course.id,
-                                course.name,
+                                course.title,
                                 course.distance,
-                                course.height,
-                                course.time,
+                                course.max_height,
+                                course.moving_time,
                                 course.difficulty,
-                                course.url,
+                                course.gpx_url,
                                 review.count(),
                                 review.score.avg(),
                                 course.thumbnail
@@ -38,12 +45,26 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .from(review)
                 .rightJoin(review.course, course)
                 .where(
-                        course.name.contains(keyword)
-                .or(course.mountain.name.contains(keyword))
-                .or(course.location.contains(keyword)))
+                        course.title.contains(keyword)
+                                .or(course.location.contains(keyword))
+                )
                 .groupBy(course.id)
                 .orderBy(orderCond(cond))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        // count query 최적화
+        // 마지막 페이지일 경우 countQuery 호출 안함
+        JPAQuery<Course> countQuery = queryFactory
+                .selectFrom(course)
+                .where(
+                        course.title.contains(keyword)
+                                .or(course.location.contains(keyword))
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+
     }
 
     @Override
@@ -52,14 +73,14 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .select(
                         new QCourseDetailDto(
                                 course.id,
-                                course.name,
+                                course.title,
                                 course.location,
                                 course.distance,
-                                course.time,
-                                course.speed,
-                                course.height,
+                                course.moving_time,
+                                course.avg_speed,
+                                course.max_height,
                                 course.difficulty,
-                                course.url,
+                                course.gpx_url,
                                 review.count(),
                                 review.score.avg(),
                                 course.thumbnail
@@ -76,7 +97,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
             return course.difficulty.asc();
         }
         else if(cond.equals("height")){
-            return course.height.asc();
+            return course.max_height.asc();
         }
         else if(cond.equals("distance")){
             return course.distance.asc();

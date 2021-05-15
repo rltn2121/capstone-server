@@ -5,6 +5,8 @@ import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +25,7 @@ public class CourseService {
         return courseRepository.findCourseDetail(courseId);
     }
 
-    public List<CoursePreviewDto> searchCourses(String keyword, String order){
-        return courseRepository.searchCourses(keyword, order);
+    public Page<CoursePreviewDto> searchCourses(String keyword, String order, Pageable pageable){
+        return courseRepository.searchCourses(keyword, order, pageable);
     }
 }

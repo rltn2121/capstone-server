@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -17,25 +18,24 @@ public class Course {
     @Column(name = "course_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="mountain_id")
-    private Mountain mountain;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
-
     @Column(length = 50)
-    private String name;
-    private Double distance;
-    private Double speed;
-    private int height;
-    private String location;
-    private int difficulty;
-    private LocalTime time;
+    private String title;
 
+    private String filename;
+    private Double distance;
+    private String moving_time;
+    private String total_time;
+    private Double avg_speed;
+    private Double avg_pace;
+    private String location;
+    private int max_height;
+    private int min_height;
+    private int total_uphill;
+    private int total_downhill;
+    private String difficulty;
+    private LocalDateTime date;
     @Column(columnDefinition = "TEXT")
-    private String url;
+    private String gpx_url;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
 }

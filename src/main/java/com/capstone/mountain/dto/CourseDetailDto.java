@@ -19,19 +19,21 @@ public class CourseDetailDto {
     private String time;
     private Double speed;
     private int height;
-    private int difficulty;
+    private String difficulty;
     private String url;
     private Long review_cnt;
     private Double score;
     private String thumbnail;
 
     @QueryProjection
-    public CourseDetailDto(Long id, String name, String location, Double distance, LocalTime time, Double speed, int height, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
+    public CourseDetailDto(Long id, String name, String location, Double distance, String time, Double speed, int height, String difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.distance = distance;
-        this.time = (time == null) ? "0시간 0분 0초" : time.getHour() + "시간 " + time.getMinute() + "분 " + time.getSecond() + "초";
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3,5));
+        this.time = hour + "시간 " + minute + "분";
         this.speed = speed;
         this.height = height;
         this.difficulty = difficulty;

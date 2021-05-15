@@ -18,19 +18,23 @@ public class CoursePreviewDto {
     private Double distance;
     private int height;
     private String time;
-    private int difficulty;
+    private String difficulty;
     private String url;
+
     private Long review_cnt;
     private Double score;
     private String thumbnail;
 
     @QueryProjection
-    public CoursePreviewDto(Long id, String name, Double distance, int height, LocalTime time, int difficulty, String url, Long review_cnt, Double score, String thumbnail) {
+    public CoursePreviewDto(Long id, String name, Double distance, int height, String time, String difficulty, String url, Long review_cnt, Double score, String thumbnail) {
         this.id = id;
         this.name = (name.length() > 20 ? name.substring(0, 17) + "..." : name);
         this.distance = distance;
         this.height = height;
-        this.time = time.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3,5));
+
+        this.time = hour + "시간 " + minute + "분";
         this.difficulty = difficulty;
         this.url = url;
         this.review_cnt = review_cnt;
