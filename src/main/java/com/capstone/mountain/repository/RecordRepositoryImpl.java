@@ -20,10 +20,10 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
         return queryFactory
                 .select(new QRecordPreviewDto(
                         record.id,
-                        record.name,
+                        record.title,
                        record.distance,
-                        record.height,
-                        record.duration,
+                        record.max_height,
+                        record.moving_time_str,
                         record.calorie,
                         record.thumbnail
                 ))
@@ -35,21 +35,22 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
 
     @Override
     public RecordDetailDto findRecordDetail(Long recordId) {
-        return queryFactory
-                .select(new QRecordDetailDto(
-                        record.id,
-                        record.name,
-                        record.thumbnail,
-                        record.duration,
-                        record.movingTime,
-                        record.distance,
-                        record.speed,
-                        record.height,
-                        record.calorie,
-                        record.date
-                ))
-                .from(record)
-                .where(record.id.eq(recordId))
-                .fetchOne();
+        return null;
+//        return queryFactory
+//                .select(new QRecordDetailDto(
+//                        record.id,
+//                        record.title,
+//                        record.thumbnail,
+//                        record.total_time_sec,
+//                        record.moving_time_sec,
+//                        record.distance,
+//                        record.avg_speed,
+//                        record.max_height,
+//                        record.calorie,
+//                        record.date
+//                ))
+//                .from(record)
+//                .where(record.id.eq(recordId))
+//                .fetchOne();
     }
 }

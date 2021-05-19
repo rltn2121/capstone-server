@@ -1,5 +1,6 @@
 package com.capstone.mountain.repository;
 
+import com.capstone.mountain.dto.QUserProfileDto;
 import com.capstone.mountain.dto.UserProfileDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,23 +35,39 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     @Override
     public UserProfileDto getUserProfile(Long userId) {
-        List<LocalTime> timeList = getLocalTimes(userId);
-        Tuple tuple = queryFactory
+        //List<LocalTime> timeList = getLocalTimes(userId);
+        UserProfileDto userProfileDto = queryFactory
                 .select(
-                        user.id,
-                        user.nickname,
-                        user.weight,
-                        user.height,
-                        record.distance.sum(),
-                        record.distance.avg(),
-                        record.height.sum(),
-                        record.height.max(),
-                        record.height.avg(),
-                        record.speed.avg(),
-                        record.speed.max(),
-                        record.calorie.sum(),
-                        record.calorie.avg(),
-                        user.url
+                        new QUserProfileDto(
+                                user.id,
+                                user.nickname,
+                                user.height,
+                                user.weight,
+                                user.url,
+                                record.distance.sum(),
+                                record.distance.avg(),
+                                record.distance.max(),
+                                record.moving_time_sec.sum().longValue(),
+                                record.moving_time_sec.avg(),
+                                record.moving_time_sec.max().longValue(),
+                                record.total_time_sec.sum().longValue(),
+                                record.total_time_sec.avg(),
+                                record.total_time_sec.max().longValue(),
+                                record.avg_speed.avg(),
+                                record.avg_speed.max(),
+                                record.avg_pace.avg(),
+                                record.avg_pace.max(),
+                                record.max_height.max(),
+                                record.max_height.avg(),
+                                record.total_uphill.sum(),
+                                record.total_uphill.avg(),
+                                record.total_uphill.max(),
+                                record.total_downhill.sum(),
+                                record.total_downhill.avg(),
+                                record.total_downhill.max(),
+                                record.calorie.sum(),
+                                record.calorie.avg()
+                        )
                 )
                 .from(record)
                 .rightJoin(record.user, user)
@@ -58,7 +75,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .groupBy(user)
                 .fetchOne();
 
-        return new UserProfileDto(tuple, getDuration(timeList, "sum"), getDuration(timeList, "avg"));
+        return userProfileDto;
+//        return null;
     }
 
     private String getDuration(List<LocalTime> timeList, String cmd) {
@@ -85,11 +103,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         return hour + "시간 " + minute + "분 " + second + "초";
     }
 
-    private List<LocalTime> getLocalTimes(Long userId) {
-        return queryFactory
-                .select(record.duration)
-                .from(record)
-                .where(record.user.id.eq(userId))
-                .fetch();
-    }
+//    private List<LocalTime> getLocalTimes(Long userId) {
+//        return queryFactory
+//                .select(record.duration)
+//                .from(record)
+//                .where(record.user.id.eq(userId))
+//                .fetch();
+//    }
 }

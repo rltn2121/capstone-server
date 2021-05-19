@@ -28,13 +28,13 @@ public class RecordDetailDto {
     private String date;
 
     @QueryProjection
-    public RecordDetailDto(Long id, String name, String thumbnail, LocalTime duration, LocalTime movingTime, Double distance, Double speed, int height, int calorie, LocalDateTime date) {
+    public RecordDetailDto(Long id, String name, String thumbnail, String duration, String movingTime, Double distance, Double speed, int height, int calorie, LocalDateTime date) {
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
-        this.duration = duration.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
-        this.movingTime = movingTime.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
-        this.restTime = (duration.getHour() - movingTime.getHour()) + "시간 " + (duration.getMinute() - movingTime.getMinute()) + "분 " + (duration.getSecond() - movingTime.getSecond()) + "초";
+        //this.duration = duration.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
+        //this.movingTime = movingTime.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
+        //this.restTime = (duration.getHour() - movingTime.getHour()) + "시간 " + (duration.getMinute() - movingTime.getMinute()) + "분 " + (duration.getSecond() - movingTime.getSecond()) + "초";
         this.distance = distance;
         this.speed = speed;
         this.height = height;

@@ -22,22 +22,32 @@ public class Record {
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="course_id")
-    private Course course;
+    @Column(length = 50)
+    private String title;
 
+    private String filename;
+    private Double distance;
+    private String moving_time_str;
+    private String total_time_str;
+    private int moving_time_sec;
+    private int total_time_sec;
+
+    private Double avg_speed;
+    private Double avg_pace;
+    private String location;
+    private Double latitude;
+    private Double longitude;
+
+    private int max_height;
+    private int min_height;
+    private int ele_dif;
+    private int total_uphill;
+    private int total_downhill;
+    private String difficulty;
+    private int calorie;
+    private LocalDateTime date;
     @Column(columnDefinition = "TEXT")
-    private String url;
-
+    private String gpx_url;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
-    private LocalDateTime date;
-    @Column(name="moving_time")
-    private LocalTime movingTime;
-    private LocalTime duration;
-    private Double distance;
-    private Double speed;
-    private int height;
-    private String name;
-    private int calorie;
 }
