@@ -33,22 +33,23 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.id,
                                 course.title,
                                 course.distance,
-                                course.max_height,
-                                course.moving_time,
+                                course.ele_dif,
+                                course.moving_time_str,
                                 course.difficulty,
                                 course.gpx_url,
-                                review.count(),
-                                review.score.avg(),
+                                //review.count(),
+                                //review.score.avg(),
                                 course.thumbnail
                         )
                 )
-                .from(review)
-                .rightJoin(review.course, course)
+                .from(course)
+             //   .from(review)
+             //   .rightJoin(review.course, course)
                 .where(
                         course.title.contains(keyword)
                                 .or(course.location.contains(keyword))
                 )
-                .groupBy(course.id)
+             //   .groupBy(course.id)
                 .orderBy(orderCond(cond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -76,18 +77,26 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.title,
                                 course.location,
                                 course.distance,
-                                course.moving_time,
+                                course.moving_time_str,
+                                course.total_time_str,
                                 course.avg_speed,
+                                course.avg_pace,
                                 course.max_height,
+                                course.min_height,
+                                course.ele_dif,
+                                course.total_uphill,
+                                course.total_downhill,
                                 course.difficulty,
+                                course.thumbnail,
                                 course.gpx_url,
-                                review.count(),
-                                review.score.avg(),
-                                course.thumbnail
+                                course.date
+//                                review.count(),
+//                                review.score.avg(),
                         )
                 )
-                .from(review)
-                .rightJoin(review.course, course)
+                .from(course)
+//                .from(review)
+//                .rightJoin(review.course, course)
                 .where(course.id.eq(courseId))
                 .fetchOne();
     }

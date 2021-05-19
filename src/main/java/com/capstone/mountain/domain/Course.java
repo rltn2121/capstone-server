@@ -23,13 +23,20 @@ public class Course {
 
     private String filename;
     private Double distance;
-    private String moving_time;
-    private String total_time;
+    private String moving_time_str;
+    private String total_time_str;
+    private int moving_time_sec;
+    private int total_time_sec;
+
     private Double avg_speed;
     private Double avg_pace;
     private String location;
+    private Double latitude;
+    private Double longitude;
+
     private int max_height;
     private int min_height;
+    private int ele_dif;
     private int total_uphill;
     private int total_downhill;
     private String difficulty;

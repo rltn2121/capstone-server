@@ -30,7 +30,7 @@ public class CourseController {
     @GetMapping("/course/{course_id}")
     public ResponseEntity<Message> findCourseDetail(@PathVariable("course_id") Long id){
         CourseDetailDto courseDetail = courseService.findCourseDetail(id);
-        if(courseDetail.getId() == null){
+        if(courseDetail == null){
             throw new NoResultException("조회 결과 없음.");
         }
         Message message = new Message();
