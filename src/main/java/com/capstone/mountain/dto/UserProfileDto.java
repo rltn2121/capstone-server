@@ -62,7 +62,7 @@ public class UserProfileDto {
         this.nickname = nickname;
         this.user_height = user_height;
         this.user_weight = user_weight;
-        this.picture = picture;
+        this.picture = (picture == null || picture.equals("")) ? "no_image" : picture;
         this.total_distance = round(total_distance*100)/100.0 + "km";
         this.avg_distance = round(avg_distance*100)/100.0 + "km";
         this.max_distance = round(max_distance*100)/100.0 + "km";
