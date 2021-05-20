@@ -255,7 +255,8 @@ public class UserController{
 
         String username = kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId();
         String password = "qwerty123";
-        return getJwt(response, username, password);
+        String nickname = kakaoProfile.getProperties().getNickname();
+        return getJwt(response, username, password, nickname);
 
     }
 
@@ -317,18 +318,20 @@ public class UserController{
         }
         String username = kakaoProfile.getResponse().getEmail()+"_"+kakaoProfile.getResponse().getId();
         String password = "qwerty123";
+        String nickname = kakaoProfile.getResponse().getName();
 
         // 가입자 혹은 비가입자 체크 해서 처리
-        return getJwt(response, username, password);
+        return getJwt(response, username, password, nickname);
     }
 
-    private ResponseEntity<Message> getJwt(HttpServletResponse response, String username, String password) {
+    private ResponseEntity<Message> getJwt(HttpServletResponse response, String username, String password, String nickname) {
         // 가입자 혹은 비가입자 체크 해서 처리
         User originUser = userService.chkUserExist(username);
         if (originUser.getUsername() == null) {
             System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
             originUser.setUsername(username);
             originUser.setPassword(password);
+            originUser.setNickname(nickname);
             userService.join(originUser);
         }
         return autoLogin(response, password, originUser);
