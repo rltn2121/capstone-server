@@ -18,10 +18,13 @@ public class HotCourse {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
 
-    private int rank;
 
     private LocalDateTime created_at;
 }

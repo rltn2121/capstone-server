@@ -1,33 +1,39 @@
-//package com.capstone.mountain.repository;
-//import com.capstone.mountain.domain.QCourse;
-//import com.capstone.mountain.dto.CourseDetailDto;
-//import com.capstone.mountain.dto.CoursePreviewDto;
-//import com.capstone.mountain.dto.QCourseDetailDto;
-//import com.capstone.mountain.dto.QCoursePreviewDto;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
-//import org.assertj.core.api.Assertions;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import javax.persistence.EntityManager;
-//import java.util.List;
-//
-//import static com.capstone.mountain.domain.QCourse.course;
-//import static com.capstone.mountain.domain.QReview.review;
-//
-//
-//@SpringBootTest
-//@Transactional
-//class CourseRepositoryTest {
-//    @Autowired
-//    CourseRepository courseRepository;
-//    @Autowired
-//    EntityManager em;
-//
-//    @Autowired
-//    JPAQueryFactory queryFactory;
+package com.capstone.mountain.repository;
+import com.capstone.mountain.dto.*;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+
+
+@SpringBootTest
+@Transactional
+class CourseRepositoryTest {
+    @Autowired
+    CourseRepository courseRepository;
+    @Autowired
+    EntityManager em;
+
+    @Autowired
+    JPAQueryFactory queryFactory;
+
+    @Test
+    public void 추천목록() throws Exception{
+        // given
+        Long userId = 1L;
+
+        // when
+        List<CourseRecommendDto> recommendCourse = courseRepository.getRecommendCourseMain(userId);
+
+        // then
+        Assertions.assertThat(recommendCourse.size()).isEqualTo(100);
+
+    }
 //    @Test
 //    public void 등산로찾기2() throws Exception{
 //        // given
@@ -68,4 +74,4 @@
 //        // then
 //        Assertions.assertThat(courseDetailDto.getName()).isEqualTo("210421 자굴산~한우산");
 //    }
-//}
+}

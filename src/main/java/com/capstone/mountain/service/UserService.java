@@ -88,4 +88,15 @@ public class UserService {
         }
         return false;
     }
+
+    public User getUserFromJWT(String jwtToken) {
+        String username =
+                JWT.require(Algorithm.HMAC512("cos"))
+                        .build()
+                        .verify(jwtToken)       // 여기서 JWTDecodeException 발생
+                        .getClaim("username")
+                        .asString();
+        User user = findByUsername(username);
+        return user;
+    }
 }

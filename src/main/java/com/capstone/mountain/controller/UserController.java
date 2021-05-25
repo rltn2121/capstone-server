@@ -55,7 +55,7 @@ public class UserController{
         Map<String, String> message = new HashMap<>();
 
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
-        User user = getUserFromJWT(jwtToken);
+        User user = userService.getUserFromJWT(jwtToken);
         String nickname = req.get("nickname");
         int height = Integer.parseInt(req.get("height"));
         int weight = Integer.parseInt(req.get("weight"));
@@ -79,7 +79,7 @@ public class UserController{
     @GetMapping("/user")
     public ResponseEntity<Message> getUserProfile(HttpServletRequest request){
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
-        User user = getUserFromJWT(jwtToken);
+        User user = userService.getUserFromJWT(jwtToken);
 
         UserProfileDto userProfile = userService.getUserProfile(user.getId());
         if(userProfile == null){
@@ -93,16 +93,7 @@ public class UserController{
         return new ResponseEntity<>(message, message.getStatus());
     }
 
-    private User getUserFromJWT(String jwtToken) {
-        String username =
-                    JWT.require(Algorithm.HMAC512("cos"))
-                            .build()
-                            .verify(jwtToken)       // 여기서 JWTDecodeException 발생
-                            .getClaim("username")
-                            .asString();
-        User user = userService.findByUsername(username);
-        return user;
-    }
+
 
     @GetMapping("/auth/kakao/callback")
     public ResponseEntity<Message> kakaoCallback(String code){

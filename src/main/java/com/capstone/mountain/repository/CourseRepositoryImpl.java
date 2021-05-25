@@ -1,12 +1,12 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.Course;
-import com.capstone.mountain.dto.CourseDetailDto;
-import com.capstone.mountain.dto.CoursePreviewDto;
-import com.capstone.mountain.dto.QCourseDetailDto;
-import com.capstone.mountain.dto.QCoursePreviewDto;
+import com.capstone.mountain.domain.HotCourse;
+import com.capstone.mountain.dto.*;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,67 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.capstone.mountain.domain.QCourse.course;
+import static com.capstone.mountain.domain.QHotCourse.hotCourse;
 import static com.capstone.mountain.domain.QReview.review;
+import static com.capstone.mountain.domain.QUser.user;
 
 @RequiredArgsConstructor
 public class CourseRepositoryImpl implements CourseRepositoryCustom{
     private final JPAQueryFactory queryFactory;
+
+
+    @Override
+    public List<CourseRecommendDto> getRecommendCourseMain(Long userId) {
+        List<CourseRecommendDto> fetch = queryFactory
+                .select(
+                        new QCourseRecommendDto(
+                                course.id,
+                                course.title,
+                                course.distance,
+                                course.moving_time_str,
+                                course.difficulty,
+                                course.thumbnail
+                        )
+                )
+                .from(hotCourse)
+                .leftJoin(hotCourse.course, course)
+                .where(hotCourse.user.id.eq(userId))
+                .orderBy(Expressions.numberTemplate(Long.class, "function('rand')").asc())
+                .limit(20)
+                .fetch();
+        return fetch;
+    }
+
+    @Override
+    public Page<CoursePreviewDto> getRecommendCourseDetail(Long userId, Pageable pageable) {
+        List<CoursePreviewDto> content = queryFactory
+                .select(
+                        new QCoursePreviewDto(
+                                course.id,
+                                course.title,
+                                course.distance,
+                                course.ele_dif,
+                                course.moving_time_str,
+                                course.difficulty,
+                                course.gpx_url,
+                                course.thumbnail
+                        )
+                )
+                .from(hotCourse)
+                .leftJoin(hotCourse.course, course)
+                .where(hotCourse.user.id.eq(userId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // count query 최적화
+        // 마지막 페이지일 경우 countQuery 호출 안함
+        JPAQuery<HotCourse> countQuery = queryFactory
+                .selectFrom(hotCourse)
+                .where(hotCourse.user.id.eq(userId));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
 
     @Override
     public Page<CoursePreviewDto> searchCourses(String keyword, String cond, Pageable pageable) {
@@ -67,6 +123,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
 
     }
+
 
     @Override
     public CourseDetailDto findCourseDetail(Long courseId) {
