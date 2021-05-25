@@ -1,12 +1,17 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.QRecord;
+import com.capstone.mountain.domain.Record;
 import com.capstone.mountain.dto.QRecordDetailDto;
 import com.capstone.mountain.dto.QRecordPreviewDto;
 import com.capstone.mountain.dto.RecordDetailDto;
 import com.capstone.mountain.dto.RecordPreviewDto;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -16,12 +21,12 @@ import static com.capstone.mountain.domain.QRecord.record;
 public class RecordRepositoryImpl implements RecordRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<RecordPreviewDto> findRecordPreview(Long userId) {
-        return queryFactory
+    public Page<RecordPreviewDto> findRecordPreview(Long userId, Pageable pageable) {
+        List<RecordPreviewDto> content = queryFactory
                 .select(new QRecordPreviewDto(
                         record.id,
                         record.title,
-                       record.distance,
+                        record.distance,
                         record.max_height,
                         record.moving_time_str,
                         record.calorie,
@@ -29,28 +34,35 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
                 ))
                 .from(record)
                 .where(record.user.id.eq(userId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Record> countQuery = queryFactory.selectFrom(record)
+                .where(record.user.id.eq(userId));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
 
     }
 
     @Override
     public RecordDetailDto findRecordDetail(Long recordId) {
-        return null;
-//        return queryFactory
-//                .select(new QRecordDetailDto(
-//                        record.id,
-//                        record.title,
-//                        record.thumbnail,
-//                        record.total_time_sec,
-//                        record.moving_time_sec,
-//                        record.distance,
-//                        record.avg_speed,
-//                        record.max_height,
-//                        record.calorie,
-//                        record.date
-//                ))
-//                .from(record)
-//                .where(record.id.eq(recordId))
-//                .fetchOne();
+//        return null;
+        return queryFactory
+                .select(new QRecordDetailDto(
+                        record.id,
+                        record.filename,
+                        record.thumbnail,
+                        record.total_time_sec.longValue(),
+                        record.moving_time_sec.longValue(),
+                        record.distance,
+                        record.avg_speed,
+                        record.max_height,
+                        record.calorie,
+                        record.date.stringValue()
+                ))
+                .from(record)
+                .where(record.id.eq(recordId))
+                .fetchOne();
     }
 }

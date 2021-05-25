@@ -2,10 +2,12 @@ package com.capstone.mountain.repository;
 
 import com.capstone.mountain.dto.RecordDetailDto;
 import com.capstone.mountain.dto.RecordPreviewDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface RecordRepositoryCustom {
-    List<RecordPreviewDto> findRecordPreview(Long userId);
+    Page<RecordPreviewDto> findRecordPreview(Long userId, Pageable pageable);
     RecordDetailDto findRecordDetail(Long recordId);
 }

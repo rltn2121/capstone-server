@@ -7,6 +7,8 @@ import com.capstone.mountain.dto.RecordPreviewDto;
 import com.capstone.mountain.repository.RecordRepository;
 import com.capstone.mountain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +21,8 @@ import java.util.Optional;
 public class RecordService {
     private final RecordRepository recordRepository;
 
-    public List<RecordPreviewDto> findRecords(Long userId){
-        return recordRepository.findRecordPreview(userId);
+    public Page<RecordPreviewDto> findRecords(Long userId, Pageable pageable){
+        return recordRepository.findRecordPreview(userId, pageable);
     }
 
     public RecordDetailDto findRecordDetail(Long recordId) {

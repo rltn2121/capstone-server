@@ -18,27 +18,39 @@ public class RecordDetailDto {
     private String name;
     private String thumbnail;
 
-    private String duration;
+    private String totalTime;
     private String movingTime;
     private String restTime;
-    private Double distance;
-    private Double speed;
-    private int height;
-    private int calorie;
+    private String distance;
+    private String speed;
+    private String height;
+    private String calorie;
     private String date;
 
     @QueryProjection
-    public RecordDetailDto(Long id, String name, String thumbnail, String duration, String movingTime, Double distance, Double speed, int height, int calorie, LocalDateTime date) {
+
+    public RecordDetailDto(Long id, String name, String thumbnail, long totalTime, long movingTime, Double distance, Double speed, int height, int calorie, String date) {
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
-        //this.duration = duration.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
-        //this.movingTime = movingTime.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
-        //this.restTime = (duration.getHour() - movingTime.getHour()) + "시간 " + (duration.getMinute() - movingTime.getMinute()) + "분 " + (duration.getSecond() - movingTime.getSecond()) + "초";
-        this.distance = distance;
-        this.speed = speed;
-        this.height = height;
-        this.calorie = calorie;
-        this.date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        this.totalTime = getTimeFromSecond(totalTime);
+        this.movingTime = getTimeFromSecond(movingTime);
+        this.restTime = getTimeFromSecond(totalTime - movingTime);
+        this.restTime = restTime;
+        this.distance = distance+"km";
+        this.speed = speed+"km/h";
+        this.height = height+"m";
+        this.calorie = calorie+"kcal";
+        this.date = date;
+    }
+
+    private String getTimeFromSecond(long time_sec) {
+        long second = time_sec;
+        long hour = second / 3600;
+        second %= 3600;
+        long minute = second / 60;
+        second %= 60;
+
+        return String.format("%02d:%02d:%02d", hour, minute, second);
     }
 }

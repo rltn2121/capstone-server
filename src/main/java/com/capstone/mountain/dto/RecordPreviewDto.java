@@ -14,10 +14,10 @@ import java.time.format.DateTimeFormatter;
 public class RecordPreviewDto {
     private Long id;
     private String name;
-    private Double distance;
-    private int height;
+    private String distance;
+    private String height;
     private String time;
-    private int calorie;
+    private String calorie;
     private String thumbnail;
 
     @QueryProjection
@@ -25,11 +25,13 @@ public class RecordPreviewDto {
     public RecordPreviewDto(Long id, String name, Double distance, int height, String time, int calorie, String thumbnail) {
         this.id = id;
         this.name = name;
-        this.distance = distance;
-        this.height = height;
-        //this.time = time.format(DateTimeFormatter.ofPattern("h시간 mm분 ss초"));
-        this.time = time;
-        this.calorie = calorie;
+        this.distance = distance+"km";
+        this.height = height+"m";
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3,5));
+
+        this.time = hour + "시간 " + minute + "분";
+        this.calorie = calorie + "kcal";
         this.thumbnail = thumbnail;
     }
 }
