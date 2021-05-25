@@ -23,4 +23,12 @@ public class Favorite {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
+
+    private boolean status;
+
+    public Favorite(User user, Course course, boolean status) {
+        this.user = user;
+        this.course = course;
+        this.status = status;
+    }
 }
