@@ -68,15 +68,16 @@ public class CourseController {
         // 최근 12개월 이내 따라간 횟수 상위 20개
         List<CourseMainPageDto> hotCourse = courseService.getHotCourseMain();
 
-        MainDto mainDto = new MainDto(recommendCourse, hotCourse);
 
-        // 1. 둘 다 없음
-        if(recommendCourse.size()==0 && hotCourse.size() == 0){
+        // 1. 인기 목록 없음
+        if(hotCourse.size() == 0){
             throw new NoResultException("조회 결과 없음.");
         }
-
-        // 2. 둘 중 하나 없음
-
+        // 2. 추천 목록 없음
+        if(recommendCourse.size() == 0){
+            recommendCourse = hotCourse;
+        }
+        MainDto mainDto = new MainDto(recommendCourse, hotCourse);
         // 3. 둘 다 있음
         Message message = new Message();
         message.setStatus(OK);
@@ -90,9 +91,13 @@ public class CourseController {
                                                             Pageable pageable){
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = userService.getUserFromJWT(jwtToken);
-        Page<CoursePreviewDto> result = courseService.getRecommendCoursesDetail(user.getId(), pageable);
+        Page<CoursePreviewDto> result;
+        result = courseService.getRecommendCoursesDetail(user.getId(), pageable);
         if(result.getNumberOfElements()==0){
-            throw new NoResultException("조회 결과 없음.");
+            result = courseService.getHotCoursesDetail(pageable);
+            if(result.getNumberOfElements()==0){
+                throw new NoResultException("조회 결과 없음.");
+            }
         }
         Message message = new Message();
         message.setStatus(OK);
