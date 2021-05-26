@@ -25,7 +25,6 @@ public class RecommendCourse {
     @JoinColumn(name="course_id")
     private Course course;
 
-    private int rank;
 
     private LocalDateTime created_at;
 }

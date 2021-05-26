@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class HotCourse {
     @Id
     @GeneratedValue
-    @Column(name = "hc_id")
+    @Column(name = "recommend_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,6 +25,7 @@ public class HotCourse {
     @JoinColumn(name="course_id")
     private Course course;
 
+    private int rank;
 
     private LocalDateTime created_at;
 }

@@ -1,27 +1,23 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.Course;
-import com.capstone.mountain.domain.HotCourse;
+import com.capstone.mountain.domain.QRecommendCourse;
+import com.capstone.mountain.domain.RecommendCourse;
 import com.capstone.mountain.dto.*;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.capstone.mountain.domain.QCourse.course;
 import static com.capstone.mountain.domain.QHotCourse.hotCourse;
-import static com.capstone.mountain.domain.QReview.review;
-import static com.capstone.mountain.domain.QUser.user;
+import static com.capstone.mountain.domain.QRecommendCourse.recommendCourse;
 
 @RequiredArgsConstructor
 public class CourseRepositoryImpl implements CourseRepositoryCustom{
@@ -41,9 +37,9 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.thumbnail
                         )
                 )
-                .from(hotCourse)
-                .leftJoin(hotCourse.course, course)
-                .where(hotCourse.user.id.eq(userId))
+                .from(recommendCourse)
+                .leftJoin(recommendCourse.course, course)
+                .where(recommendCourse.user.id.eq(userId))
                 .orderBy(Expressions.numberTemplate(Long.class, "function('rand')").asc())
                 .limit(20)
                 .fetch();
@@ -65,18 +61,18 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.thumbnail
                         )
                 )
-                .from(hotCourse)
-                .leftJoin(hotCourse.course, course)
-                .where(hotCourse.user.id.eq(userId))
+                .from(recommendCourse)
+                .leftJoin(recommendCourse.course, course)
+                .where(recommendCourse.user.id.eq(userId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         // count query 최적화
         // 마지막 페이지일 경우 countQuery 호출 안함
-        JPAQuery<HotCourse> countQuery = queryFactory
-                .selectFrom(hotCourse)
-                .where(hotCourse.user.id.eq(userId));
+        JPAQuery<RecommendCourse> countQuery = queryFactory
+                .selectFrom(recommendCourse)
+                .where(recommendCourse.user.id.eq(userId));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
