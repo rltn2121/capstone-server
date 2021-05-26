@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @NoArgsConstructor
 @ToString
-public class CourseRecommendDto {
+public class CourseMainPageDto {
     private Long id;
     private String name;
     private String distance;
@@ -21,7 +21,7 @@ public class CourseRecommendDto {
     private String thumbnail;
 
     @QueryProjection
-    public CourseRecommendDto(Long id, String name, Double distance, String moving_time, String difficulty, String thumbnail) {
+    public CourseMainPageDto(Long id, String name, Double distance, String moving_time, String difficulty, String thumbnail) {
         this.id = id;
         this.name = (name.length() > 20 ? name.substring(0, 17) + "..." : name);
         this.distance = distance+"km";

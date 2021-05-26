@@ -2,7 +2,7 @@ package com.capstone.mountain.service;
 
 import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
-import com.capstone.mountain.dto.CourseRecommendDto;
+import com.capstone.mountain.dto.CourseMainPageDto;
 import com.capstone.mountain.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,12 +26,19 @@ public class CourseService {
         return courseRepository.searchCourses(keyword, order, pageable);
     }
 
-    public List<CourseRecommendDto> getRecommendCoursesMain(Long userId){
+    public List<CourseMainPageDto> getRecommendCoursesMain(Long userId){
         return courseRepository.getRecommendCourseMain(userId);
+    }
+
+    public List<CourseMainPageDto> getHotCourseMain(){
+        return courseRepository.getHotCourseMain();
     }
 
     public Page<CoursePreviewDto> getRecommendCoursesDetail(Long userId, Pageable pageable){
         return courseRepository.getRecommendCourseDetail(userId, pageable);
+    }
+    public Page<CoursePreviewDto> getHotCoursesDetail(Pageable pageable){
+        return courseRepository.getHotCourseDetail(pageable);
     }
 }
 

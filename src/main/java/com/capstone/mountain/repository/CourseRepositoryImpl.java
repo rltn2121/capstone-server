@@ -1,9 +1,10 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.Course;
-import com.capstone.mountain.domain.QRecommendCourse;
 import com.capstone.mountain.domain.RecommendCourse;
+import com.capstone.mountain.domain.Record;
 import com.capstone.mountain.dto.*;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -13,22 +14,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.capstone.mountain.domain.QCourse.course;
-import static com.capstone.mountain.domain.QHotCourse.hotCourse;
 import static com.capstone.mountain.domain.QRecommendCourse.recommendCourse;
+import static com.capstone.mountain.domain.QRecord.record;
 
 @RequiredArgsConstructor
 public class CourseRepositoryImpl implements CourseRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
-
     @Override
-    public List<CourseRecommendDto> getRecommendCourseMain(Long userId) {
-        List<CourseRecommendDto> fetch = queryFactory
+    public List<CourseMainPageDto> getRecommendCourseMain(Long userId) {
+        List<CourseMainPageDto> fetch = queryFactory
                 .select(
-                        new QCourseRecommendDto(
+                        new QCourseMainPageDto(
                                 course.id,
                                 course.title,
                                 course.distance,
@@ -41,9 +42,33 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .leftJoin(recommendCourse.course, course)
                 .where(recommendCourse.user.id.eq(userId))
                 .orderBy(Expressions.numberTemplate(Long.class, "function('rand')").asc())
-                .limit(20)
+                .limit(10)
                 .fetch();
         return fetch;
+    }
+
+    @Override
+    public List<CourseMainPageDto> getHotCourseMain() {
+        return queryFactory
+                .select(
+                        new QCourseMainPageDto(
+                                course.id,
+                                course.title,
+                                course.distance,
+                                course.moving_time_str,
+                                course.difficulty,
+                                course.thumbnail
+                        )
+                )
+                .from(record)
+                .leftJoin(record.course, course)
+                .where(
+                        record.date.after(LocalDateTime.now().minusMonths(12))
+                )
+                .groupBy(record.course)
+                .orderBy(record.course.count().desc())
+                .limit(10)
+                .fetch();
     }
 
     @Override
@@ -73,6 +98,42 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
         JPAQuery<RecommendCourse> countQuery = queryFactory
                 .selectFrom(recommendCourse)
                 .where(recommendCourse.user.id.eq(userId));
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<CoursePreviewDto> getHotCourseDetail(Pageable pageable) {
+        List<CoursePreviewDto> content = queryFactory
+                .select(
+                        new QCoursePreviewDto(
+                                course.id,
+                                course.title,
+                                course.distance,
+                                course.ele_dif,
+                                course.moving_time_str,
+                                course.difficulty,
+                                course.gpx_url,
+                                course.thumbnail
+                        )
+                )
+                .from(record)
+                .leftJoin(record.course, course)
+                .where(
+                        record.date.after(LocalDateTime.now().minusMonths(12))
+                )
+                .groupBy(record.course)
+                .orderBy(record.course.count().desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // count query 최적화
+        // 마지막 페이지일 경우 countQuery 호출 안함
+        JPAQuery<Record> countQuery = queryFactory
+                .selectFrom(record)
+                .where(record.date.after(LocalDateTime.now().minusMonths(12)))
+                .groupBy(record.course);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }

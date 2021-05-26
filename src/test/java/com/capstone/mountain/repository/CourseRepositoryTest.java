@@ -1,5 +1,6 @@
 //package com.capstone.mountain.repository;
 //import com.capstone.mountain.dto.*;
+//import com.querydsl.core.Tuple;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
@@ -8,7 +9,10 @@
 //import org.springframework.transaction.annotation.Transactional;
 //
 //import javax.persistence.EntityManager;
+//import java.time.LocalDateTime;
 //import java.util.List;
+//
+//import static com.capstone.mountain.domain.QRecord.record;
 //
 //
 //@SpringBootTest
@@ -28,12 +32,15 @@
 //        Long userId = 1L;
 //
 //        // when
-//        List<CourseRecommendDto> recommendCourse = courseRepository.getRecommendCourseMain(userId);
+//        List<CourseMainPageDto> recommendCourse = courseRepository.getRecommendCourseMain(userId);
 //
 //        // then
 //        Assertions.assertThat(recommendCourse.size()).isEqualTo(100);
 //
 //    }
+//
+//
+//
 ////    @Test
 ////    public void 등산로찾기2() throws Exception{
 ////        // given
