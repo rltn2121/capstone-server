@@ -1,5 +1,6 @@
 package com.capstone.mountain.service;
 
+import com.capstone.mountain.domain.Course;
 import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.dto.CourseMainPageDto;
@@ -18,6 +19,9 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
 
+    public Course findById(Long courseId){
+        return courseRepository.findById(courseId).get();
+    }
     public CourseDetailDto findCourseDetail(Long courseId){
         return courseRepository.findCourseDetail(courseId);
     }

@@ -23,9 +23,11 @@ public class ReportService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
 
-    public Report saveReport(Long userId, Long courseId, String reason){
-        User user = userRepository.findById(userId).get();
-        Course course = courseRepository.findById(courseId).get();
+    public Report findReport(User user, Course course){
+        return reportRepository.findByUserAndCourse(user, course);
+    }
+
+    public Report saveReport(User user, Course course, String reason){
         Report report = new Report(user, course, reason);
         Report save = reportRepository.save(report);
         return save;

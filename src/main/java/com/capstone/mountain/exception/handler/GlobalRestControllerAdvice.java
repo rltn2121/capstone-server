@@ -1,5 +1,6 @@
 package com.capstone.mountain.exception.handler;
 
+import com.capstone.mountain.exception.custom.DataAlreadyExistException;
 import com.capstone.mountain.exception.custom.NoResultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,17 @@ public class GlobalRestControllerAdvice {
         log.error(e.getMessage(), e);
         Map<String, String> errorAttributes = new HashMap<>();
         errorAttributes.put("status", "NO_CONTENT");
+        errorAttributes.put("message", e.getMessage());
+//        errorAttributes.put("data", "");
+        return errorAttributes;
+    }
+
+    // 추가할 데이터 이미 존재
+    @ExceptionHandler(DataAlreadyExistException.class)
+    public Map<String, String> existHandle(DataAlreadyExistException e){
+        log.error(e.getMessage(), e);
+        Map<String, String> errorAttributes = new HashMap<>();
+        errorAttributes.put("status", "ALREADY_EXIST");
         errorAttributes.put("message", e.getMessage());
 //        errorAttributes.put("data", "");
         return errorAttributes;
