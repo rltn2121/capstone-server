@@ -67,10 +67,10 @@ public class CourseController {
         // 최근 12개월 이내 따라간 횟수 상위 20개
         List<CourseMainPageDto> hotCourse = courseService.getHotCourseMain();
 
-        List<MountainPreviewDto> hotMountain = mountainService.getHotMountain();
+        List<MountainMainPageDto> hotMountain = mountainService.getHotMountain();
         double latitude = 34.976956653660075;
         double longitude = 128.33237146155233;
-        List<MountainPreviewDto> nearMountain = mountainService.getNearMountain(latitude, longitude);
+        List<MountainMainPageDto> nearMountain = mountainService.getNearMountain(latitude, longitude);
         // 1. 인기 목록 없음
         if(hotCourse.size() == 0){
             throw new NoResultException("조회 결과 없음.");

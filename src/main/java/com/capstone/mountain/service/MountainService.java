@@ -1,9 +1,12 @@
 package com.capstone.mountain.service;
 
 import com.capstone.mountain.domain.Mountain;
+import com.capstone.mountain.dto.MountainMainPageDto;
 import com.capstone.mountain.dto.MountainPreviewDto;
 import com.capstone.mountain.repository.MountainRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +27,15 @@ public class MountainService {
         return mountainRepository.findById(id);
     }
 
-    public List<MountainPreviewDto> getHotMountain(){
+    public List<MountainMainPageDto> getHotMountain(){
         return mountainRepository.getHotMountain();
     }
 
-    public List<MountainPreviewDto> getNearMountain(double latitude, double longitude){
+    public List<MountainMainPageDto> getNearMountain(double latitude, double longitude){
         return mountainRepository.getNearMountain(latitude, longitude);
     }
 
+    public Page<MountainPreviewDto> getMountainList(Pageable pageable){
+        return mountainRepository.getMountainList(pageable);
+    }
 }

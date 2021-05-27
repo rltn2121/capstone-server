@@ -1,24 +1,17 @@
 package com.capstone.mountain.controller;
 
 import com.capstone.mountain.Message;
-import com.capstone.mountain.domain.Mountain;
-import com.capstone.mountain.domain.User;
+import com.capstone.mountain.dto.MountainMainPageDto;
 import com.capstone.mountain.dto.MountainPreviewDto;
-import com.capstone.mountain.dto.RecordPreviewDto;
-import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.MountainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -38,8 +31,8 @@ public class MountainController {
 //    }
 //
     @GetMapping("/mountain/hot")
-    public ResponseEntity<Message> getHotMountain(){
-        List<MountainPreviewDto> result = mountainService.getHotMountain();
+    public ResponseEntity<Message> getHotMountain(Pageable pageable){
+        Page<MountainPreviewDto> result = mountainService.getMountainList(pageable);
 
         Message message = new Message();
         message.setStatus(OK);
@@ -52,7 +45,7 @@ public class MountainController {
     public ResponseEntity<Message> getNearMountain(){
         double latitude = 34.976956653660075;
         double longitude = 128.33237146155233;
-        List<MountainPreviewDto> result = mountainService.getNearMountain(latitude, longitude);
+        List<MountainMainPageDto> result = mountainService.getNearMountain(latitude, longitude);
 
         Message message = new Message();
         message.setStatus(OK);

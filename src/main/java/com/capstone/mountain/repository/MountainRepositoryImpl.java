@@ -1,13 +1,19 @@
 package com.capstone.mountain.repository;
 
-import com.capstone.mountain.domain.QMountain;
+import com.capstone.mountain.domain.Mountain;
+import com.capstone.mountain.dto.MountainMainPageDto;
 import com.capstone.mountain.dto.MountainPreviewDto;
+import com.capstone.mountain.dto.QMountainMainPageDto;
 import com.capstone.mountain.dto.QMountainPreviewDto;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,10 +24,10 @@ import static com.capstone.mountain.domain.QMountain.mountain;
 public class MountainRepositoryImpl implements MountainRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<MountainPreviewDto> getHotMountain() {
+    public List<MountainMainPageDto> getHotMountain() {
         return queryFactory
                 .select(
-                        new QMountainPreviewDto(
+                        new QMountainMainPageDto(
                                 mountain.thumbnail,
                                 mountain.id,
                                 mountain.name
@@ -34,10 +40,10 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     }
 
     @Override
-    public List<MountainPreviewDto> getNearMountain(double latitude, double longitude) {
-        List<MountainPreviewDto> fetch = queryFactory
+    public List<MountainMainPageDto> getNearMountain(double latitude, double longitude) {
+        List<MountainMainPageDto> fetch = queryFactory
                 .select(
-                        new QMountainPreviewDto(
+                        new QMountainMainPageDto(
                                 mountain.thumbnail,
                                 mountain.id,
                                 mountain.name
@@ -53,6 +59,29 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
                 .fetch();
 
         return fetch;
+    }
+
+    @Override
+    public Page<MountainPreviewDto> getMountainList(Pageable pageable) {
+        List<MountainPreviewDto> content = queryFactory
+                .select(
+                        new QMountainPreviewDto(
+                                mountain.id,
+                                mountain.name,
+                                mountain.height,
+                                mountain.location,
+                                mountain.thumbnail
+                        ))
+                .from(mountain)
+                .orderBy(orderCond())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Mountain> countQuery = queryFactory
+                .selectFrom(mountain);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     private OrderSpecifier<?> orderCond() {
