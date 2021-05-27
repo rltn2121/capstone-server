@@ -2,12 +2,10 @@ package com.capstone.mountain.controller;
 
 import com.capstone.mountain.Message;
 import com.capstone.mountain.domain.User;
-import com.capstone.mountain.dto.CourseDetailDto;
-import com.capstone.mountain.dto.CourseMainPageDto;
-import com.capstone.mountain.dto.CoursePreviewDto;
-import com.capstone.mountain.dto.MainDto;
+import com.capstone.mountain.dto.*;
 import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.CourseService;
+import com.capstone.mountain.service.MountainService;
 import com.capstone.mountain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +27,7 @@ public class CourseController {
 
     private final CourseService courseService;
     private final UserService userService;
+    private final MountainService mountainService;
 
     @GetMapping("/course/{course_id}")
     public ResponseEntity<Message> findCourseDetail(@PathVariable("course_id") Long id){
@@ -68,7 +67,10 @@ public class CourseController {
         // 최근 12개월 이내 따라간 횟수 상위 20개
         List<CourseMainPageDto> hotCourse = courseService.getHotCourseMain();
 
-
+        List<MountainPreviewDto> hotMountain = mountainService.getHotMountain();
+        double latitude = 34.976956653660075;
+        double longitude = 128.33237146155233;
+        List<MountainPreviewDto> nearMountain = mountainService.getNearMountain(latitude, longitude);
         // 1. 인기 목록 없음
         if(hotCourse.size() == 0){
             throw new NoResultException("조회 결과 없음.");
@@ -77,7 +79,7 @@ public class CourseController {
         if(recommendCourse.size() == 0){
             recommendCourse = hotCourse;
         }
-        MainDto mainDto = new MainDto(recommendCourse, hotCourse);
+        MainDto mainDto = new MainDto(recommendCourse, hotCourse, hotMountain, nearMountain);
         // 3. 둘 다 있음
         Message message = new Message();
         message.setStatus(OK);

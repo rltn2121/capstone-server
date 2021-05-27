@@ -21,6 +21,7 @@ public class CoursePreviewDto {
     private String difficulty;
     private String url;
 
+
 //    private Long review_cnt;
 //    private Double score;
     private String thumbnail;

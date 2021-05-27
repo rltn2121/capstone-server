@@ -22,12 +22,20 @@ public class Mountain {
     @Column(length = 10)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String url;
-
-    @Column(length=200)
-    private String contents;
+    private int height;
 
     @Column(length=200)
     private String location;
+
+    private int spring;
+    private int summer;
+    private int fall;
+    private int winter;
+
+    private double latitude;
+    private double longitude;
+
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
+
 }

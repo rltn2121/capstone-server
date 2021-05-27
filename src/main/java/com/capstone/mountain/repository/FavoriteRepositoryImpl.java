@@ -15,7 +15,6 @@ import java.util.List;
 
 import static com.capstone.mountain.domain.QCourse.course;
 import static com.capstone.mountain.domain.QFavorite.favorite;
-import static com.capstone.mountain.domain.QHotCourse.hotCourse;
 
 @RequiredArgsConstructor
 public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{

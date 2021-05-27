@@ -11,4 +11,6 @@ import java.util.List;
 public class MainDto {
     private List<CourseMainPageDto> recommendCourse = new ArrayList<>();
     private List<CourseMainPageDto> hotCourse = new ArrayList<>();
+    private List<MountainPreviewDto> hotMountain = new ArrayList<>();
+    private List<MountainPreviewDto> nearMountain = new ArrayList<>();
 }
