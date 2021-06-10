@@ -1,13 +1,11 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.Mountain;
-import com.capstone.mountain.dto.MountainMainPageDto;
-import com.capstone.mountain.dto.MountainPreviewDto;
-import com.capstone.mountain.dto.QMountainMainPageDto;
-import com.capstone.mountain.dto.QMountainPreviewDto;
+import com.capstone.mountain.dto.*;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -40,24 +38,18 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     }
 
     @Override
-    public List<MountainMainPageDto> getNearMountain(double latitude, double longitude) {
-        List<MountainMainPageDto> fetch = queryFactory
+    public List<MountainNearDto> getNearMountain(double latitude, double longitude) {
+        List<MountainNearDto> fetch = queryFactory
                 .select(
-                        new QMountainMainPageDto(
+                        new QMountainNearDto(
                                 mountain.thumbnail,
                                 mountain.id,
-                                mountain.name
+                                mountain.name,
+                                mountain.latitude,
+                                mountain.longitude
                         ))
                 .from(mountain)
-                .where(test(
-                        latitude,
-                        longitude,
-                        mountain.latitude.doubleValue().toString(),
-                        mountain.longitude.doubleValue().toString())
-                )
-                .limit(5)
                 .fetch();
-
         return fetch;
     }
 
@@ -102,23 +94,5 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     }
 
 
-    public BooleanExpression test(double lat, double lon, String dstLat, String dstLon){
-//        System.out.println("dstLat = " + dstLat);
-//        System.out.println("dstLon = " + dstLon);
-//        double dist = measure(lat, lon, dstLat, dstLon);
-        BooleanExpression ret = Expressions.asBoolean(true);
-//        return (dist <= 50000)? ret.isTrue() : ret.isFalse();
-        return ret.isTrue();
-    }
-    private double measure(double lat1, double lon1, double lat2, double lon2){
-        double R = 6378.137; // Radius of earth in KM
-        double dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-        double dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                        Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
-        return d * 1000; // meters
-    }
+
 }

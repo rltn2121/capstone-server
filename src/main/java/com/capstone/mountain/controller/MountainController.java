@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,9 +43,8 @@ public class MountainController {
     }
 
     @GetMapping("/mountain/near")
-    public ResponseEntity<Message> getNearMountain(){
-        double latitude = 34.976956653660075;
-        double longitude = 128.33237146155233;
+    public ResponseEntity<Message> getNearMountain(@RequestParam double latitude,
+                                                   @RequestParam double longitude){
         List<MountainMainPageDto> result = mountainService.getNearMountain(latitude, longitude);
 
         Message message = new Message();

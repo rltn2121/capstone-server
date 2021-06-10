@@ -101,27 +101,5 @@ public class UserProfileDto {
 
         return hour + "시간 " + minute + "분 " + second + "초";
     }
-//    public UserProfileDto(Tuple tuple, String duration_total, String duration_avg) {
-//        this.user_id = tuple.get(0, Long.class);
-//        this.nickname = tuple.get(1, String.class);
-//        this.user_height = (tuple.get(3, Integer.class)==0?"-":tuple.get(3, Integer.class)).toString();
-//        this.user_weight = (tuple.get(2, Integer.class)==0?"-":tuple.get(2, Integer.class)).toString();
-//        this.total_distance = (tuple.get(4, Double.class) == null?0.0:round(tuple.get(4, Double.class)*100)/100.0 )+ "km";
-//        this.avg_distance = (tuple.get(5, Double.class)==null?0.0:round(tuple.get(5, Double.class)*100)/100.0)+ "km";
-//        this.total_height = (tuple.get(6, Integer.class) == null ? 0 : tuple.get(6, Integer.class))+ "m";
-//        this.max_height = (tuple.get(7, Integer.class) == null ? 0 : tuple.get(7, Integer.class))+ "m";
-//        this.avg_height = (tuple.get(8, Double.class) == null ? 0 : (int)Math.round(tuple.get(8, Double.class)))+ "m";
-//        this.avg_speed = (tuple.get(9, Double.class) == null ? 0.0 : round(tuple.get(9, Double.class)*100)/100.0)+ "km/h";
-//        this.max_speed = (tuple.get(10, Double.class) == null ? 0.0 : tuple.get(10, Double.class))+ "km/h";
-//        this.total_calories = (tuple.get(11, Integer.class) == null ? 0 : (int)round(tuple.get(11, Integer.class))) + "kcal";
-//        this.avg_calories = (tuple.get(12, Double.class) == null ? 0 : (int)round(tuple.get(12, Double.class)))+"kcal";
-//        String image_url = tuple.get(13, String.class);
-//        if(image_url == null || image_url.equals("")){
-//            this.picture = "no_image";
-//        }
-//        else
-//            this.picture = image_url;
-//        this.total_time = duration_total;
-//        this.avg_time = duration_avg;
-//    }
+
 }

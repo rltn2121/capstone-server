@@ -58,7 +58,9 @@ public class CourseController {
     }
 
     @GetMapping("/course/main")
-    public ResponseEntity<Message> getMainCourse(HttpServletRequest request){
+    public ResponseEntity<Message> getMainCourse(HttpServletRequest request,
+                                                 @RequestParam double latitude,
+                                                 @RequestParam double longitude){
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = userService.getUserFromJWT(jwtToken);
 
@@ -68,8 +70,7 @@ public class CourseController {
         List<CourseMainPageDto> hotCourse = courseService.getHotCourseMain();
 
         List<MountainMainPageDto> hotMountain = mountainService.getHotMountain();
-        double latitude = 34.976956653660075;
-        double longitude = 128.33237146155233;
+
         List<MountainMainPageDto> nearMountain = mountainService.getNearMountain(latitude, longitude);
         // 1. 인기 목록 없음
         if(hotCourse.size() == 0){
