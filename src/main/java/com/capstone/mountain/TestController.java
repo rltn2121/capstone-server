@@ -58,4 +58,10 @@ public class TestController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+
+    @GetMapping("/jython")
+    public void jythonTest(){
+        JythonTest jythonTest = new JythonTest();
+        jythonTest.test();
+    }
 }
