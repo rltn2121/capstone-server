@@ -90,6 +90,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .leftJoin(recommendCourse.course, course)
                 .where(course.id.eq(9060L))
                 .fetch();
+        content.remove(1);
+        System.out.println("content.size() = " + content.size());
 
         List<CoursePreviewDto> fetch = queryFactory
                 .select(
