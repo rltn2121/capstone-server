@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,10 +20,11 @@ public class RecordPreviewDto {
     private String time;
     private String calorie;
     private String thumbnail;
+    private String date;
 
     @QueryProjection
 
-    public RecordPreviewDto(Long id, String name, Double distance, int height, String time, int calorie, String thumbnail) {
+    public RecordPreviewDto(Long id, String name, Double distance, int height, String time, int calorie, String thumbnail, LocalDateTime date) {
         this.id = id;
         this.name = name;
         this.distance = distance+"km";
@@ -33,5 +35,7 @@ public class RecordPreviewDto {
         this.time = hour + "시간 " + minute + "분";
         this.calorie = calorie + "kcal";
         this.thumbnail = thumbnail;
+
+        this.date = String.format("%04d-%02d-%02d %02d:%02d:%02d", date.getYear(),date.getMonthValue(),date.getDayOfMonth(),date.getHour(),date.getMinute(),date.getSecond());
     }
 }

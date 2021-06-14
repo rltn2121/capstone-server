@@ -30,7 +30,8 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
                         record.max_height,
                         record.moving_time_str,
                         record.calorie,
-                        record.thumbnail
+                        record.thumbnail,
+                        record.date
                 ))
                 .from(record)
                 .where(record.user.id.eq(userId))

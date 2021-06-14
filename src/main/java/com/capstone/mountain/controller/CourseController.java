@@ -30,8 +30,11 @@ public class CourseController {
     private final MountainService mountainService;
 
     @GetMapping("/course/{course_id}")
-    public ResponseEntity<Message> findCourseDetail(@PathVariable("course_id") Long id){
-        CourseDetailDto courseDetail = courseService.findCourseDetail(id);
+    public ResponseEntity<Message> findCourseDetail(HttpServletRequest request,
+                                                    @PathVariable Long course_id){
+        String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+        User user = userService.getUserFromJWT(jwtToken);
+        CourseDetailDto courseDetail = courseService.findCourseDetail(course_id, user.getId());
         if(courseDetail == null){
             throw new NoResultException("조회 결과 없음.");
         }
@@ -63,7 +66,7 @@ public class CourseController {
                                                  @RequestParam double longitude){
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = userService.getUserFromJWT(jwtToken);
-
+        String nickname = user.getNickname();
         List<CourseMainPageDto> recommendCourse = courseService.getRecommendCoursesMain(user.getId());
 
         // 최근 12개월 이내 따라간 횟수 상위 20개
@@ -80,7 +83,7 @@ public class CourseController {
         if(recommendCourse.size() == 0){
             recommendCourse = hotCourse;
         }
-        MainDto mainDto = new MainDto(recommendCourse, hotCourse, hotMountain, nearMountain);
+        MainDto mainDto = new MainDto(nickname, recommendCourse, hotCourse, hotMountain, nearMountain);
         // 3. 둘 다 있음
         Message message = new Message();
         message.setStatus(OK);

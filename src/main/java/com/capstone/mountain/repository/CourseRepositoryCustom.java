@@ -14,6 +14,6 @@ public interface CourseRepositoryCustom {
     List<CourseMainPageDto> getHotCourseMain();
     Page<CoursePreviewDto> getRecommendCourseDetail(Long userId, Pageable pageable);
     Page<CoursePreviewDto> getHotCourseDetail(Pageable pageable);
-    CourseDetailDto findCourseDetail(Long courseId);
+    CourseDetailDto findCourseDetail(Long courseId, Long userId);
 
 }

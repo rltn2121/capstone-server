@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class MainDto {
+    private String nickname;
     private List<CourseMainPageDto> recommendCourse = new ArrayList<>();
     private List<CourseMainPageDto> hotCourse = new ArrayList<>();
     private List<MountainMainPageDto> hotMountain = new ArrayList<>();

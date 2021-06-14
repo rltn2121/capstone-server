@@ -22,8 +22,8 @@ public class CourseService {
     public Course findById(Long courseId){
         return courseRepository.findById(courseId).get();
     }
-    public CourseDetailDto findCourseDetail(Long courseId){
-        return courseRepository.findCourseDetail(courseId);
+    public CourseDetailDto findCourseDetail(Long courseId, Long userId){
+        return courseRepository.findCourseDetail(courseId, userId);
     }
 
     public Page<CoursePreviewDto> searchCourses(String keyword, String order, Pageable pageable){

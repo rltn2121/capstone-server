@@ -1,6 +1,7 @@
 package com.capstone.mountain.repository;
 
 import com.capstone.mountain.domain.Course;
+import com.capstone.mountain.domain.QFavorite;
 import com.capstone.mountain.domain.RecommendCourse;
 import com.capstone.mountain.domain.Record;
 import com.capstone.mountain.dto.*;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.capstone.mountain.domain.QCourse.course;
+import static com.capstone.mountain.domain.QFavorite.favorite;
 import static com.capstone.mountain.domain.QRecommendCourse.recommendCourse;
 import static com.capstone.mountain.domain.QRecord.record;
 
@@ -204,7 +206,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
 
 
     @Override
-    public CourseDetailDto findCourseDetail(Long courseId) {
+    public CourseDetailDto findCourseDetail(Long courseId, Long userId) {
         return queryFactory
                 .select(
                         new QCourseDetailDto(
@@ -224,15 +226,17 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                                 course.difficulty,
                                 course.thumbnail,
                                 course.gpx_url,
-                                course.date
+                                course.date,
+                                favorite.status
 //                                review.count(),
 //                                review.score.avg(),
                         )
                 )
                 .from(course)
+                .leftJoin(favorite.course, course)
 //                .from(review)
 //                .rightJoin(review.course, course)
-                .where(course.id.eq(courseId))
+                .where(course.id.eq(courseId).and(favorite.user.id.eq(userId)))
                 .fetchOne();
     }
 

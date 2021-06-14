@@ -33,11 +33,12 @@ public class CourseDetailDto {
     private String thumbnail;
     private String url;
     private String date;
+    private boolean like_status;
    // private Long review_cnt;
   //  private Double score;
 
     @QueryProjection
-    public CourseDetailDto(Long id, String name, String location, Double distance, String moving_time_str, String total_time_str, Double avg_speed, Double avg_pace, int max_height, int min_height, int ele_dif, int total_uphill, int total_downhill, String difficulty, String thumbnail, String url, LocalDateTime date) {
+    public CourseDetailDto(Long id, String name, String location, Double distance, String moving_time_str, String total_time_str, Double avg_speed, Double avg_pace, int max_height, int min_height, int ele_dif, int total_uphill, int total_downhill, String difficulty, String thumbnail, String url, LocalDateTime date, boolean like_status) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -68,6 +69,7 @@ public class CourseDetailDto {
         this.date = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth() + " " +
         date.getHour() + ":" + date.getMinute() + ":" + date.getSecond();
 //        this.score = (score == null ? 0 : Math.round(score*10)/10.0);
+        this.like_status = like_status;
     }
 
 
