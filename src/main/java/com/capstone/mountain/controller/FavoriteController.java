@@ -43,9 +43,10 @@ public class FavoriteController {
         return new ResponseEntity<>(message, OK);
     }
 
-    @PostMapping("/favorite/{course_id}")
-    public Map<String, String> toggleFavorite(HttpServletRequest request, @PathVariable("course_id") Long courseId) {
+    @PostMapping("/favorite")
+    public Map<String, String> toggleFavorite(HttpServletRequest request,@RequestBody Map<String, String> req) {
 
+        Long courseId = Long.parseLong(req.get("course_id"));
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
         User user = userService.getUserFromJWT(jwtToken);
 
