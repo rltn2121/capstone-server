@@ -66,8 +66,7 @@ public class CourseDetailDto {
         this.difficulty = difficulty;
         this.thumbnail = thumbnail;
         this.url = url;
-        this.date = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth() + " " +
-        date.getHour() + ":" + date.getMinute() + ":" + date.getSecond();
+        this.date = String.format("%04d-%02d-%02d %02d:%02d:%02d", date.getYear(),date.getMonthValue(),date.getDayOfMonth(),date.getHour(),date.getMinute(),date.getSecond());
 //        this.score = (score == null ? 0 : Math.round(score*10)/10.0);
         this.like_status = like_status;
     }

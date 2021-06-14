@@ -232,8 +232,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
 //                                review.score.avg(),
                         )
                 )
-                .from(course)
-                .leftJoin(favorite.course, course)
+                .from(favorite)
+                .rightJoin(favorite.course, course)
 //                .from(review)
 //                .rightJoin(review.course, course)
                 .where(course.id.eq(courseId).and(favorite.user.id.eq(userId)))
