@@ -51,9 +51,11 @@ public class FavoriteController {
         User user = userService.getUserFromJWT(jwtToken);
 
         String result = favoriteService.toggleFavorite(user, courseId);
-
         Map<String, String> message = new HashMap<>();
-        message.put("status", "OK");
+        if(result.equals("추가 성공"))
+            message.put("status", "ADDED");
+        else if(result.equals("제거 성공"))
+            message.put("status", "REMOVED");
         message.put("message", result);
         return message;
     }
