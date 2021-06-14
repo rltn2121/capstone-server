@@ -90,31 +90,10 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 )
                 .from(recommendCourse)
                 .leftJoin(recommendCourse.course, course)
-                .where(course.id.eq(9060L))
-                .fetch();
-        content.remove(1);
-        System.out.println("content.size() = " + content.size());
-
-        List<CoursePreviewDto> fetch = queryFactory
-                .select(
-                        new QCoursePreviewDto(
-                                course.id,
-                                course.title,
-                                course.distance,
-                                course.ele_dif,
-                                course.moving_time_str,
-                                course.difficulty,
-                                course.gpx_url,
-                                course.thumbnail
-                        )
-                )
-                .from(recommendCourse)
-                .leftJoin(recommendCourse.course, course)
                 .where(recommendCourse.user.id.eq(userId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        content.addAll(fetch);
 
         // count query 최적화
         // 마지막 페이지일 경우 countQuery 호출 안함
