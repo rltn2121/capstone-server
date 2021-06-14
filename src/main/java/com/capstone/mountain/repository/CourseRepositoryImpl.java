@@ -186,38 +186,74 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
 
     @Override
     public CourseDetailDto findCourseDetail(Long courseId, Long userId) {
-        return queryFactory
-                .select(
-                        new QCourseDetailDto(
-                                course.id,
-                                course.title,
-                                course.location,
-                                course.distance,
-                                course.moving_time_str,
-                                course.total_time_str,
-                                course.avg_speed,
-                                course.avg_pace,
-                                course.max_height,
-                                course.min_height,
-                                course.ele_dif,
-                                course.total_uphill,
-                                course.total_downhill,
-                                course.difficulty,
-                                course.thumbnail,
-                                course.gpx_url,
-                                course.date,
-                                favorite.status
-//                                review.count(),
-//                                review.score.avg(),
-                        )
-                )
+
+
+        CourseDetailDto courseDetailDto = queryFactory
+                .select(new QCourseDetailDto(
+                        course.id,
+                        course.title,
+                        course.location,
+                        course.distance,
+                        course.moving_time_str,
+                        course.total_time_str,
+                        course.avg_speed,
+                        course.avg_pace,
+                        course.max_height,
+                        course.min_height,
+                        course.ele_dif,
+                        course.total_uphill,
+                        course.total_downhill,
+                        course.difficulty,
+                        course.thumbnail,
+                        course.gpx_url,
+                        course.date,
+                        favorite.status
+                ))
                 .from(favorite)
                 .rightJoin(favorite.course, course)
-//                .from(review)
-//                .rightJoin(review.course, course)
-                .where(course.id.eq(courseId).and(favorite.user.id.eq(userId)))
+                .groupBy(course.id, favorite.status)
+                .having(course.id.eq(courseId))
                 .fetchOne();
+        return courseDetailDto;
+
+
+        //        select *
+//                from course a
+//        left join favorite b on a.course_id = b.course_id
+//        group by a.course_id, status
+//        having a.course_id = 1
+//        return queryFactory
+//                .select(
+//                        new QCourseDetailDto(
+//                                course.id,
+//                                course.title,
+//                                course.location,
+//                                course.distance,
+//                                course.moving_time_str,
+//                                course.total_time_str,
+//                                course.avg_speed,
+//                                course.avg_pace,
+//                                course.max_height,
+//                                course.min_height,
+//                                course.ele_dif,
+//                                course.total_uphill,
+//                                course.total_downhill,
+//                                course.difficulty,
+//                                course.thumbnail,
+//                                course.gpx_url,
+//                                course.date
+////                                review.count(),
+////                                review.score.avg(),
+//                        )
+//                )
+//                .from(course)
+////                .from(review)
+////                .rightJoin(review.course, course)
+//                .where(course.id.eq(courseId))
+//                .fetchOne();
     }
+
+
 
     private OrderSpecifier<?> orderCond(String cond) {
         if(cond.equals("difficulty")) {

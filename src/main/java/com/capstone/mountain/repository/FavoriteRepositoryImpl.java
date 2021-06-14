@@ -69,4 +69,17 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{
                 )
                 .execute();
     }
+
+    @Override
+    public boolean getFavoriteStatus(Long userId, Long courseId) {
+        Boolean aBoolean = queryFactory
+                .select(favorite.status)
+                .from(favorite)
+                .where(favorite.user.id.eq(userId)
+                        .and(course.id.eq(courseId)))
+                .fetchOne();
+        return aBoolean;
+    }
+
+
 }

@@ -71,6 +71,7 @@ public class CourseDetailDto {
         this.like_status = like_status;
     }
 
-
-
+    public void setLike_status(boolean like_status) {
+        this.like_status = like_status;
+    }
 }

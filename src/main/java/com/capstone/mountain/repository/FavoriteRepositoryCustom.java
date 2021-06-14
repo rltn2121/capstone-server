@@ -11,4 +11,5 @@ public interface FavoriteRepositoryCustom {
     Page<CoursePreviewDto> findByUser(User user, Pageable pageable);
     Favorite isFavoriteExist(User user, Course course);
     long toggleFavorite(User user, Course course, boolean status);
+    boolean getFavoriteStatus(Long userId, Long courseId);
 }

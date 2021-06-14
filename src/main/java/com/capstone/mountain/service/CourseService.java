@@ -5,6 +5,7 @@ import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.dto.CourseMainPageDto;
 import com.capstone.mountain.repository.CourseRepository;
+import com.capstone.mountain.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final FavoriteRepository favoriteRepository;
 
     public Course findById(Long courseId){
         return courseRepository.findById(courseId).get();
     }
     public CourseDetailDto findCourseDetail(Long courseId, Long userId){
-        return courseRepository.findCourseDetail(courseId, userId);
+        CourseDetailDto courseDetail = courseRepository.findCourseDetail(courseId, userId);
+
+//        boolean favoriteStatus = false;
+//        if(favoriteRepository.getFavoriteStatus(userId, courseId) != null){
+//
+//        }
+//        courseDetail.setLike_status(favoriteStatus);
+        return courseDetail;
     }
 
     public Page<CoursePreviewDto> searchCourses(String keyword, String order, Pageable pageable){
