@@ -35,6 +35,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
                 ))
                 .from(record)
                 .where(record.user.id.eq(userId))
+                .orderBy(record.date.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
