@@ -42,4 +42,38 @@
   <li><b>등산 기록</b>: 사용자의 등산 기록을 최신순으로 확인 가능
 </ul>
 
-  
+<h2>💻개발 환경</h2>
+Server Framework SpringBoot 2.4.4
+Web server Nginx
+Database MariaDB 10.4.13
+Cloud Storage AWS S3
+Cloud Server Hosting AWS EC2
+Cloud Database AWS RDS
+
+
+<h2>👩‍👧‍👦팀원 역할</h2>
+공통: 추천 알고리즘 개발, GPX 크롤링 및 메타데이터 추출
+<table>
+  <thead>
+    <tr>
+      <th>이름</th>
+      <th>역할</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>박기수</th>
+      <td align:left>데이터베이스 설계<br>
+        API 서버, 추천 서버 개발<br>
+      등산 기록 측정 및 파일 업로드 구현 (안드로이드)</td>
+    </tr>
+    <tr>
+      <th>이주호</th>
+      <td align=left>UI 설계, 안드로이드 개발</td>
+    </tr>
+    <tr>
+      <th>김현지</th>
+      <td align=left>UI 설계, 안드로이드 개발</td>
+    </tr>
+  </tbody>
+</table>
