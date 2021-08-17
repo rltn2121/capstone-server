@@ -74,8 +74,10 @@
   <li><b>인기 산</b>: 현재 계절의 순위를 반영한 인기 산 목록</li>
   <li><b>근처 산</b>: 현재 유저의 위치로 부터 50km 이내에 있는 산 목록</li>
 </ul>
-
+<div align="center"> 
 <img src="https://user-images.githubusercontent.com/54628612/129683738-816d4ea1-168b-4942-adda-4d7fdce8675c.png" height="500px">
+</div>
+
 
 <br>    
 <b>2. 키워드 검색</b>
@@ -83,8 +85,10 @@
 <ul>
   <li><b>등산로 검색</b>: 등산로명, 산 이름, 지역 명 등의 키워드로 검색</li>
 </ul>
-
+<div align="center"> 
 <img src="https://user-images.githubusercontent.com/54628612/129684200-45a739c0-5237-4613-bfdb-4511d0cf97a6.png" height="500px">
+</div>
+
 
 <br>
 <b>3. 등산로 안내 및 측정</b>
@@ -95,9 +99,11 @@
        <br>　　　　　　　3초 간격으로 현재 유저가 위치한 곳의 위도, 경도, 고도와 시간을 기록.</li>
   <li><b>GPX 파일 저장</b>: 측정 종료 후, 등산 데이터를 GPX 파일로 생성. 로컬 저장소 및 서버 스토리지(AWS S3)에 저장</li>
 </ul>
+<div align="center"> 
+  
+![image](https://im4.ezgif.com/tmp/ezgif-4-441786132c09.gif)ㅤㅤㅤㅤㅤㅤㅤㅤ![image](https://im4.ezgif.com/tmp/ezgif-4-bdd8c44fd77d.gif)
+</div>
 
-![image](https://im4.ezgif.com/tmp/ezgif-4-441786132c09.gif)
-![image](https://im4.ezgif.com/tmp/ezgif-4-bdd8c44fd77d.gif)
 <br>  
 <b>4. 마이페이지, 등산 통계</b>
 <ul>
@@ -105,8 +111,10 @@
   <li><b>등산 통계</b>: 등산 거리, 등산 시간, 이동 시간, 오르막합, 내리막합, 속력, 페이스 등의 합계, 평균, 최고 기록을 제공</li>
   <li><b>등산 기록</b>: 사용자의 등산 기록을 최신순으로 확인 가능
 </ul>
-
+<div align="center"> 
 <img src="https://user-images.githubusercontent.com/54628612/129684008-2a234976-a035-4e23-b4bb-ec0e58e69769.png" height="500px">
+
+</div>
 
 <br>
 
