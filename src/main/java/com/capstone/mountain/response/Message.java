@@ -1,4 +1,4 @@
-package com.capstone.mountain;
+package com.capstone.mountain.response;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,5 @@ public class Message {
         this.status = HttpStatus.FORBIDDEN;
         this.data = null;
         this.message = "로그인이 필요한 서비스입니다.";
-    }
-
-    public Message(HttpStatus status, String message) {
-        this.status = status;
-        this.message = message;
     }
 }

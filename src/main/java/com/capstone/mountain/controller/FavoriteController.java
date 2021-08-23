@@ -1,10 +1,8 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
-import com.capstone.mountain.domain.Favorite;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.domain.User;
 import com.capstone.mountain.dto.CoursePreviewDto;
-import com.capstone.mountain.dto.RecordPreviewDto;
 import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.FavoriteService;
 import com.capstone.mountain.service.UserService;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;

@@ -1,9 +1,8 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.domain.Course;
 import com.capstone.mountain.domain.User;
-import com.capstone.mountain.dto.CourseDetailDto;
 import com.capstone.mountain.dto.RecordDetailDto;
 import com.capstone.mountain.dto.RecordPreviewDto;
 import com.capstone.mountain.exception.custom.NoResultException;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;

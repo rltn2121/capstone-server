@@ -1,18 +1,14 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.domain.Review;
-import com.capstone.mountain.dto.CoursePreviewDto;
 import com.capstone.mountain.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.http.HttpResponse;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;

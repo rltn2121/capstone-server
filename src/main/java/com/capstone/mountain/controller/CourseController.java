@@ -1,6 +1,6 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.domain.User;
 import com.capstone.mountain.dto.*;
 import com.capstone.mountain.exception.custom.NoResultException;

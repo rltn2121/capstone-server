@@ -2,7 +2,7 @@ package com.capstone.mountain.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.capstone.mountain.Message;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.auth.KakaoProfile;
 import com.capstone.mountain.auth.NaverProfile;
 import com.capstone.mountain.auth.OAuthToken;
@@ -22,8 +22,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;

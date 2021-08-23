@@ -1,27 +1,20 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
 import com.capstone.mountain.domain.Course;
 import com.capstone.mountain.domain.Report;
-import com.capstone.mountain.domain.Review;
 import com.capstone.mountain.domain.User;
 import com.capstone.mountain.exception.custom.DataAlreadyExistException;
-import com.capstone.mountain.exception.custom.NoResultException;
 import com.capstone.mountain.service.CourseService;
 import com.capstone.mountain.service.ReportService;
 import com.capstone.mountain.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor

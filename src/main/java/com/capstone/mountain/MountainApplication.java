@@ -22,7 +22,7 @@ public class MountainApplication {
     }
 
     // test
-// 서버 중단으로 인한 재배포.
+// 서버 중단으로 인한 재배포
 //    @Bean
 //    DispatcherServlet dispatcherServlet () {
 //        DispatcherServlet ds = new DispatcherServlet();

@@ -122,7 +122,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .from(record)
                 .leftJoin(record.course, course)
                 .where(
-                        record.date.after(LocalDateTime.now().minusMonths(12))
+                        record.date.after(LocalDateTime.now().minusMonths(24))
                 )
                 .groupBy(record.course)
                 .orderBy(record.course.count().desc())
@@ -134,7 +134,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
         // 마지막 페이지일 경우 countQuery 호출 안함
         JPAQuery<Record> countQuery = queryFactory
                 .selectFrom(record)
-                .where(record.date.after(LocalDateTime.now().minusMonths(12)))
+                .where(record.date.after(LocalDateTime.now().minusMonths(24)))
                 .groupBy(record.course);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);

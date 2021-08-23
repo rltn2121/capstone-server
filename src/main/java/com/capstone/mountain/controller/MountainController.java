@@ -1,6 +1,6 @@
 package com.capstone.mountain.controller;
 
-import com.capstone.mountain.Message;
+import com.capstone.mountain.response.Message;
 import com.capstone.mountain.dto.MountainMainPageDto;
 import com.capstone.mountain.dto.MountainPreviewDto;
 import com.capstone.mountain.service.MountainService;
