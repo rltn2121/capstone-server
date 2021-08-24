@@ -1,6 +1,6 @@
 //package com.capstone.mountain.service;
 //
-//import com.capstone.mountain.dto.CoursePreviewDto;
+//import com.capstone.mountain.module.model.dto.CoursePreviewDto;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

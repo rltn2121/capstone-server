@@ -1,7 +1,7 @@
 //package com.capstone.mountain.repository;
 //
-//import com.capstone.mountain.domain.Record;
-//import com.capstone.mountain.dto.RecordPreviewDto;
+//import com.capstone.mountain.module.model.domain.Record;
+//import com.capstone.mountain.module.model.dto.RecordPreviewDto;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

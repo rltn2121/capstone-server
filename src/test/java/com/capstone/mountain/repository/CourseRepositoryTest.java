@@ -1,5 +1,5 @@
 //package com.capstone.mountain.repository;
-//import com.capstone.mountain.dto.*;
+//import com.capstone.mountain.module.model.dto.*;
 //import com.querydsl.core.Tuple;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.assertj.core.api.Assertions;
@@ -12,7 +12,7 @@
 //import java.time.LocalDateTime;
 //import java.util.List;
 //
-//import static com.capstone.mountain.domain.QRecord.record;
+//import static com.capstone.mountain.module.model.domain.QRecord.record;
 //
 //
 //@SpringBootTest

@@ -1,10 +1,10 @@
 //package com.capstone.mountain.repository;
 //
-//import com.capstone.mountain.domain.QRecord;
-//import com.capstone.mountain.domain.QUser;
-//import com.capstone.mountain.domain.Record;
-//import com.capstone.mountain.domain.User;
-//import com.capstone.mountain.dto.UserProfileDto;
+//import com.capstone.mountain.module.model.domain.QRecord;
+//import com.capstone.mountain.module.model.domain.QUser;
+//import com.capstone.mountain.module.model.domain.Record;
+//import com.capstone.mountain.module.model.domain.User;
+//import com.capstone.mountain.module.model.dto.UserProfileDto;
 //import com.querydsl.core.Tuple;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.assertj.core.api.Assertions;
@@ -19,8 +19,8 @@
 //import java.time.temporal.ChronoUnit;
 //import java.util.List;
 //
-//import static com.capstone.mountain.domain.QRecord.record;
-//import static com.capstone.mountain.domain.QUser.user;
+//import static com.capstone.mountain.module.model.domain.QRecord.record;
+//import static com.capstone.mountain.module.model.domain.QUser.user;
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static org.junit.jupiter.api.Assertions.*;
 //
