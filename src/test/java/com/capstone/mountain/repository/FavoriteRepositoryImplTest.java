@@ -1,8 +1,8 @@
 //package com.capstone.mountain.repository;
 //
-//import com.capstone.mountain.domain.Course;
-//import com.capstone.mountain.domain.Favorite;
-//import com.capstone.mountain.domain.User;
+//import com.capstone.mountain.module.model.domain.Course;
+//import com.capstone.mountain.module.model.domain.Favorite;
+//import com.capstone.mountain.module.model.domain.User;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

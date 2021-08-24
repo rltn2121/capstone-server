@@ -1,8 +1,8 @@
 //<<<<<<< HEAD
 ////package com.capstone.mountain;
 /////
-////import com.capstone.mountain.domain.QUser;
-////import com.capstone.mountain.domain.User;
+////import com.capstone.mountain.module.model.domain.QUser;
+////import com.capstone.mountain.module.model.domain.User;
 ////import com.querydsl.core.types.dsl.BooleanExpression;
 ////import com.querydsl.jpa.impl.JPAQueryFactory;
 ////import org.assertj.core.api.Assertions;
@@ -15,7 +15,7 @@
 ////import javax.persistence.PersistenceContext;
 ////import java.util.List;
 ////
-////import static com.capstone.mountain.domain.QUser.*;
+////import static com.capstone.mountain.module.model.domain.QUser.*;
 ////
 ////@SpringBootTest
 ////@Transactional
@@ -65,8 +65,8 @@
 //=======
 //package com.capstone.mountain;
 //
-//import com.capstone.mountain.domain.QUser;
-//import com.capstone.mountain.domain.User;
+//import com.capstone.mountain.module.model.domain.QUser;
+//import com.capstone.mountain.module.model.domain.User;
 //import com.querydsl.core.types.dsl.BooleanExpression;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.assertj.core.api.Assertions;
@@ -79,7 +79,7 @@
 //import javax.persistence.PersistenceContext;
 //import java.util.List;
 //
-//import static com.capstone.mountain.domain.QUser.*;
+//import static com.capstone.mountain.module.model.domain.QUser.*;
 //
 //@SpringBootTest
 //@Transactional

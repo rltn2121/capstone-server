@@ -1,6 +1,6 @@
 //package com.capstone.mountain.repository;
 //
-//import com.capstone.mountain.domain.*;
+//import com.capstone.mountain.module.model.domain.*;
 //import com.querydsl.core.Tuple;
 //import com.querydsl.jpa.impl.JPAQuery;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,8 +14,8 @@
 //import java.util.List;
 //import java.util.Optional;
 //
-//import static com.capstone.mountain.domain.QCourse.*;
-//import static com.capstone.mountain.domain.QReview.review;
+//import static com.capstone.mountain.module.model.domain.QCourse.*;
+//import static com.capstone.mountain.module.model.domain.QReview.review;
 //import static org.junit.jupiter.api.Assertions.*;
 //
 //@SpringBootTest
